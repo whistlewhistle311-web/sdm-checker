@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="받은 스드메 견적을 한국소비자원 참가격 실제 계약금액과 비교하고, 견적서에 안 적힌 추가금과 계약 전 질문을 보여주는 무료 계산기. 회원가입 없음.">
+<meta property="og:title" content="스드메 견적 검사기">
+<meta property="og:description" content="내 스드메 견적, 우리 지역에서 비싼 편일까? 소비자원 8월 계약 1,768건 기준으로 바로 확인 (무료, 회원가입 없음)">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://whistlewhistle311-web.github.io/sdm-checker/">
+<meta property="og:image" content="https://whistlewhistle311-web.github.io/sdm-checker/og.png">
+<link rel="icon" href="icon.png">
+<style>html,body{margin:0}body{font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+</head><body>
+<title>스드메 견적 검사기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* 레이아웃: 견적서 한 장. 넓은 화면은 왼쪽 '내 견적' 입력지 + 오른쪽 '판정서'(따라옴), 폰은 위→아래 */
+:root{
+  --bg:#F5F4F7; --paper:#FFFFFF; --ink:#1E2032; --muted:#66647A; --line:#E2DFE9;
+  --accent:#8C2B50; --accent-soft:#F5E7EE; --accent-ink:#FFFFFF;
+  --ok:#2C7A53; --ok-soft:#E5F3EB; --warn:#9A5E06; --warn-soft:#FBF0DD; --bad:#B0281F; --bad-soft:#FBE7E5;
+  --band:#E9E6EF; --band-mid:#D3CEDD;
+  --f-display:"Hahmlet","Nanum Myeongjo",serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141319; --paper:#1D1B23; --ink:#ECEAF2; --muted:#A29EB2; --line:#34313E;
+  --accent:#E68DB1; --accent-soft:#3A2431; --accent-ink:#1A0F15;
+  --ok:#72CC9C; --ok-soft:#1C3027; --warn:#E9B556; --warn-soft:#352915; --bad:#F2877F; --bad-soft:#3A1F1D;
+  --band:#2A2732; --band-mid:#3D3948; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141319; --paper:#1D1B23; --ink:#ECEAF2; --muted:#A29EB2; --line:#34313E;
+  --accent:#E68DB1; --accent-soft:#3A2431; --accent-ink:#1A0F15;
+  --ok:#72CC9C; --ok-soft:#1C3027; --warn:#E9B556; --warn-soft:#352915; --bad:#F2877F; --bad-soft:#3A1F1D;
+  --band:#2A2732; --band-mid:#3D3948; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;font-variant-numeric:tabular-nums}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:28px 64px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.3}
+h1{font-size:clamp(26px,5vw,38px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:19px;font-weight:700}
+h3{font-size:15px;font-family:var(--f-body);font-weight:600}
+p{margin:0}
+a{color:var(--accent)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header.top{display:grid;gap:10px;margin-bottom:24px;max-width:70ch}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--accent);font-weight:600}
+.lede{color:var(--muted)}
+.basis{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.basis b{color:var(--ink);font-weight:600}
+
+.grid{display:grid;gap:20px;grid-template-columns:1fr}
+@media (min-width:900px){.grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start}
+  .result{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);max-height:calc(100vh - 32px);overflow:auto}}
+
+.sheet{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:20px;min-width:0}
+.sheet-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px dashed var(--line);padding-bottom:12px}
+.sample{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--accent-soft);border-radius:8px;padding:10px 12px;font-size:13px}
+.sample[hidden]{display:none!important}
+.btn{border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:14px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.link{border:none;background:none;padding:0;color:var(--accent);text-decoration:underline;cursor:pointer}
+
+.field{display:grid;gap:6px}
+.field label,.lbl{font-size:13px;font-weight:600;color:var(--muted)}
+select,input[type=text]{border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:9px 11px;width:100%;min-width:0}
+.row{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.won{position:relative}
+.won input{padding-right:34px;text-align:right}
+.won span{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none}
+.hint{font-size:12.5px;color:var(--muted)}
+
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{padding:6px 11px;font-size:13px;cursor:pointer;border-left:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.seg label:first-of-type{border-left:none}
+.seg input:checked+label{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.seg input:focus-visible+label{outline:2px solid var(--accent);outline-offset:-2px}
+
+.items{display:grid;gap:0;border-top:1px solid var(--line)}
+.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.item .nm{font-weight:500;min-width:0}
+.item .nm small{display:block;color:var(--muted);font-size:12px;font-weight:400}
+.item .ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.item .amt{width:auto}
+.item .amt[hidden]{display:none!important}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:1px 7px;border-radius:999px;background:var(--warn-soft);color:var(--warn);margin-left:6px;vertical-align:1px}
+@media (max-width:560px){.item{grid-template-columns:1fr}.item .ctl{justify-content:flex-start}}
+details.more>summary{cursor:pointer;color:var(--accent);font-weight:600;font-size:14px;padding:10px 0;list-style:none}
+details.more>summary::-webkit-details-marker{display:none}
+.cat{font-size:12px;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-top:14px}
+
+/* 판정서 */
+.result .verdict{display:grid;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px;width:max-content}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.chip.mid{background:var(--band);color:var(--ink)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)}
+.big{font-family:var(--f-display);font-size:clamp(22px,4vw,28px);font-weight:700;line-height:1.35}
+.scale{width:100%;height:auto;display:block}
+.scale text{font-family:var(--f-body);font-size:11px;fill:var(--muted)}
+.scale .you{fill:var(--accent)}
+.scale .youlbl{fill:var(--accent);font-weight:700;font-size:12px}
+.note{font-size:12.5px;color:var(--muted)}
+.warnbox{font-size:12.5px;background:var(--warn-soft);color:var(--warn);padding:8px 10px;border-radius:8px}
+
+.total{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.total .ln{display:flex;justify-content:space-between;gap:12px;padding:9px 12px;border-bottom:1px solid var(--line);font-size:14px}
+.total .ln:last-child{border-bottom:none}
+.total .ln span:last-child{text-align:right;white-space:nowrap}
+.total .sum{background:var(--accent-soft);font-weight:700}
+.total .sum span:last-child{color:var(--accent);font-size:17px}
+
+.flags{display:grid;gap:8px}
+.flag{border-left:4px solid var(--line);background:var(--bg);border-radius:0 8px 8px 0;padding:9px 12px;font-size:13.5px;display:grid;gap:2px}
+.flag b{font-weight:600}
+.flag.bad{border-color:var(--bad)} .flag.warn{border-color:var(--warn)} .flag.ok{border-color:var(--ok)}
+.flag .sub{color:var(--muted);font-size:12.5px}
+ol.qs{margin:0;padding-left:20px;display:grid;gap:6px;font-size:14px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.copied{font-size:12.5px;color:var(--ok)}
+
+section.rules{margin-top:28px;display:grid;gap:10px}
+.rules details{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.rules summary{cursor:pointer;font-weight:600}
+.rules p{margin-top:8px;color:var(--muted);font-size:14px;max-width:70ch}
+/* 폰: 아래 고정 요약 바 */
+.dock{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--paper);border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:14px;z-index:5}
+.dock b{color:var(--accent);font-size:16px}
+.dock a{font-weight:600;white-space:nowrap}
+@media (min-width:900px){.dock{display:none}}
+@media (max-width:899px){.wrap{padding-block:28px 96px}}
+footer{margin-top:28px;font-size:12.5px;color:var(--muted);display:grid;gap:8px;max-width:80ch}
+footer ul{margin:0;padding-left:18px}
+@media (prefers-reduced-motion:no-preference){.chip,.big{transition:color .2s}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">예비부부용 · 무료 · 회원가입 없음</span>
+    <h1>스드메 견적 검사기</h1>
+    <p class="lede">받은 스튜디오·드레스·메이크업 견적을 넣으면, 한국소비자원이 업체를 조사해 모은 실제 계약금액과 비교하고, 견적서에 안 적힌 추가금이 붙을 경우의 <b>예상 총액</b>과 계약 전에 물어볼 질문을 보여줘요.</p>
+    <div class="basis">
+      <span>기준 <b id="basisPeriod"></b></span>
+      <span>8월 스드메 패키지 계약 <b id="basisN"></b>건의 중간값·분포</span><span>(소비자원: 전체 시장 대표값은 아님)</span>
+      <span>선택품목 <b id="basisItems"></b>개 가격</span>
+    </div>
+  </header>
+
+  <div class="grid">
+    <form class="sheet" id="form" autocomplete="off">
+      <div class="sheet-head"><h2>내 견적</h2><span class="hint">입력한 내용은 이 화면에서만 쓰이고 저장·전송되지 않아요 (글꼴만 구글에서 불러와요)</span></div>
+
+      <div class="sample" id="sampleBar">
+        <span>지금 보이는 숫자는 <b>예시 견적</b>이에요.</span>
+        <button type="button" class="btn" id="clearBtn">비우고 내 견적 넣기</button>
+      </div>
+
+      <div class="row">
+        <div class="field"><label for="region">지역</label><select id="region"></select></div>
+        <div class="field"><span class="lbl" id="modeLbl">계약 방식</span>
+          <div class="seg" role="radiogroup" aria-labelledby="modeLbl">
+            <input type="radio" name="mode" id="modePkg" value="pkg" checked><label for="modePkg">스드메 패키지</label>
+            <input type="radio" name="mode" id="modeSep" value="sep"><label for="modeSep">따로따로</label>
+          </div>
+        </div>
+      </div>
+
+      <div id="pkgBox" class="field">
+        <label for="pkg">스드메 패키지 금액 (기본가)</label>
+        <div class="won"><input type="text" inputmode="numeric" id="pkg" placeholder="예: 3,500,000"><span>원</span></div>
+      </div>
+      <div id="sepBox" class="row" hidden>
+        <div class="field"><label for="studio">스튜디오</label><div class="won"><input type="text" inputmode="numeric" id="studio"><span>원</span></div></div>
+        <div class="field"><label for="dress">드레스 (본식+촬영)</label><div class="won"><input type="text" inputmode="numeric" id="dress"><span>원</span></div></div>
+        <div class="field"><label for="makeup">메이크업</label><div class="won"><input type="text" inputmode="numeric" id="makeup"><span>원</span></div></div>
+      </div>
+
+      <div class="field">
+        <h3>견적서의 추가 항목</h3>
+        <p class="hint">항목마다 견적서에 어떻게 적혀 있는지 골라 주세요. <b>포함</b>=기본가에 들어 있음 · <b>따로</b>=금액이 적혀 있음 · <b>모름</b>=견적서에 안 적혀 있음 · <b>안 함</b>=나는 필요 없음</p>
+      </div>
+      <div class="items" id="coreItems"></div>
+      <details class="more" id="moreBox">
+        <summary>다른 선택품목 <span id="moreCount"></span>개 더 보기</summary>
+        <div id="moreItems"></div>
+      </details>
+    </form>
+
+    <aside class="sheet result" id="result" aria-live="polite">
+      <div class="sheet-head"><h2>판정서</h2><span class="hint" id="regionUsed"></span></div>
+      <div class="verdict" id="verdict"></div>
+      <div id="scaleBox"></div>
+      <div>
+        <h3 style="margin-bottom:8px">추가금이 붙으면 예상 총액</h3>
+        <div class="total" id="total"></div>
+        <p class="note" style="margin-top:6px">'모름' 항목은 그 품목을 따로 받는 업체들의 가격 중간값(전국)으로 더했어요. 실제로는 안 붙을 수도 있어요. 선택품목 가격은 업체가 제시한 단가예요. 여러 개(앨범 10장, 혼주 2명 등)면 '따로'에서 개수를 같이 넣어 주세요.</p>
+      </div>
+      <div>
+        <h3 style="margin-bottom:8px">짚어볼 것</h3>
+        <div class="flags" id="flags"></div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:8px">계약 전에 물어볼 질문</h3>
+        <ol class="qs" id="qs"></ol>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn primary" id="copyQs">질문 복사</button>
+        <button type="button" class="btn" id="copySum">판정 결과 복사 (카톡 공유용)</button>
+        <span class="copied" id="copied" hidden>복사했어요</span>
+      </div>
+      <textarea id="fallback" readonly hidden style="width:100%;min-height:120px"></textarea>
+    </aside>
+  </div>
+
+  <section class="rules">
+    <h2>환불·위약금, 이것만 알아두세요</h2>
+    <div id="rules"></div>
+  </section>
+
+  <footer>
+    <p>이 페이지는 참고용이에요. 법률 자문이 아니며, 실제 계약은 계약서 조항이 먼저 적용될 수 있어요. 피해 상담은 국번 없이 <b>1372</b>(소비자상담센터).</p>
+    <p>데이터: 한국소비자원 참가격 결혼서비스 가격정보(<span id="footPeriod"></span>), 한국소비자원 2025-04 조사, 법제처 찾기쉬운 생활법령, 공정위 발표. 원본 링크:</p>
+    <ul id="sources"></ul>
+  </footer>
+</div>
+
+<div class="dock" id="dock"><span>예상 총액 <b id="dockTotal">-</b></span><a href="#result">판정서 보기 ↓</a></div>
+
+<script>
+const D = {"period":"참가격 2026년 8월 조사분 (2026년 9월 말 공개)","updated":"2026-10-02","national":{"base_avg":3460000,"addon_avg":1740000,"source":"https://www.etoday.co.kr/news/view/2419225"},"regions":[{"name":"전국","package_median":2980000,"package_p10":2010000,"package_p25":2500000,"package_p75":3500000,"package_p90":4400000,"package_n":1768,"studio":1390000,"studio_n":792,"dress":1600000,"dress_n":441,"makeup":810000,"makeup_n":501},{"name":"수도권","package_median":3300000,"package_p10":2000000,"package_p25":2500000,"package_p75":4200000,"package_p90":5730000,"package_n":712,"studio":1405000,"studio_n":342,"dress":1650000,"dress_n":238,"makeup":927500,"makeup_n":250},{"name":"비수도권","package_median":2880000,"package_p10":2100000,"package_p25":2430000,"package_p75":3300000,"package_p90":3700000,"package_n":1056,"studio":1300000,"studio_n":450,"dress":1500000,"dress_n":203,"makeup":610000,"makeup_n":251},{"name":"서울(강남)","package_median":3500000,"package_p10":2100000,"package_p25":2700000,"package_p75":4500000,"package_p90":5920000,"package_n":571,"studio":1500000,"studio_n":220,"dress":1825000,"dress_n":184,"makeup":980000,"makeup_n":207},{"name":"서울(강남외)","package_median":5980000,"package_p10":3400000,"package_p25":4000000,"package_p75":5980000,"package_p90":null,"package_n":8,"studio":1390000,"studio_n":21,"dress":1045000,"dress_n":16,"makeup":747500,"makeup_n":12},{"name":"부산","package_median":2800000,"package_p10":1550000,"package_p25":2000000,"package_p75":2940000,"package_p90":3700000,"package_n":180,"studio":1300000,"studio_n":51,"dress":1715000,"dress_n":30,"makeup":790000,"makeup_n":38},{"name":"대구","package_median":2590000,"package_p10":2200000,"package_p25":2400000,"package_p75":3000000,"package_p90":3640000,"package_n":197,"studio":1400000,"studio_n":121,"dress":1525000,"dress_n":66,"makeup":440000,"makeup_n":80},{"name":"인천","package_median":2200000,"package_p10":1780000,"package_p25":1780000,"package_p75":2200000,"package_p90":2730000,"package_n":90,"studio":1300000,"studio_n":50,"dress":1450000,"dress_n":21,"makeup":720000,"makeup_n":19},{"name":"전남광주","package_median":3000000,"package_p10":2500000,"package_p25":3000000,"package_p75":3500000,"package_p90":4000000,"package_n":163,"studio":1500000,"studio_n":94,"dress":1430000,"dress_n":19,"makeup":330000,"makeup_n":38},{"name":"대전","package_median":2590000,"package_p10":2260000,"package_p25":2590000,"package_p75":3200000,"package_p90":3400000,"package_n":65,"studio":1400000,"studio_n":12,"dress":2000000,"dress_n":11,"makeup":460000,"makeup_n":11},{"name":"울산","package_median":2300000,"package_p10":1300000,"package_p25":2100000,"package_p75":2320000,"package_p90":2700000,"package_n":47,"studio":1320000,"studio_n":25,"dress":1260000,"dress_n":8,"makeup":750000,"makeup_n":5},{"name":"경기도","package_median":2590000,"package_p10":2180000,"package_p25":2400000,"package_p75":2750000,"package_p90":2900000,"package_n":43,"studio":880000,"studio_n":51,"dress":1570000,"dress_n":17,"makeup":835000,"makeup_n":12},{"name":"강원도","package_median":2470000,"package_p10":1010000,"package_p25":2230000,"package_p75":2600000,"package_p90":2690000,"package_n":60,"studio":1540000,"studio_n":17,"dress":1485000,"dress_n":6,"makeup":632500,"makeup_n":6},{"name":"충청도","package_median":2800000,"package_p10":2120000,"package_p25":2300000,"package_p75":3200000,"package_p90":3400000,"package_n":151,"studio":1000000,"studio_n":84,"dress":1440000,"dress_n":39,"makeup":775000,"makeup_n":48},{"name":"전북","package_median":3410000,"package_p10":2600000,"package_p25":3000000,"package_p75":3670000,"package_p90":4060000,"package_n":176,"studio":1100000,"studio_n":29,"dress":1245000,"dress_n":16,"makeup":660000,"makeup_n":18},{"name":"경상도","package_median":2500000,"package_p10":1660000,"package_p25":1660000,"package_p75":3000000,"package_p90":3000000,"package_n":17,"studio":1300000,"studio_n":14,"dress":1270000,"dress_n":5,"makeup":775000,"makeup_n":4},{"name":"제주도","package_median":null,"package_p10":null,"package_p25":null,"package_p75":null,"package_p90":null,"package_n":0,"studio":1120000,"studio_n":3,"dress":1400000,"dress_n":3,"makeup":440000,"makeup_n":3}],"addons":[{"id":"raw_data","name":"원본 데이터(원본 사진파일) 구매","category":"studio","typical":300000,"low":192500,"high":385000,"p10":165000,"p90":434000,"n":352,"why_hidden":"촬영은 기본가에 들어가도 원본 파일은 따로 파는 경우가 많아 견적서에서 빠지기 쉽다."},{"id":"retouched_purchase","name":"수정본 추가 구매","category":"studio","typical":165000,"low":137500,"high":200000,"p10":120000,"p90":300000,"n":302,"why_hidden":"기본 수정본 장수를 넘으면 장당·묶음으로 따로 받는다."},{"id":"retouch_fee","name":"수정 비용(추가 보정)","category":"studio","typical":50000,"low":45000,"high":75000,"p10":26000,"p90":110000,"n":105,"why_hidden":"기본 보정 범위를 넘는 수정은 별도로 청구된다."},{"id":"pre_retouch","name":"선수정본(빠른 수정본)","category":"studio","typical":55000,"low":55000,"high":110000,"p10":50000,"p90":150000,"n":221,"why_hidden":"앨범보다 먼저 받는 수정본이 유료 옵션인 경우가 있다."},{"id":"confirm_fee","name":"컨펌비","category":"studio","typical":82500,"low":82500,"high":100000,"p10":71500,"p90":110000,"n":118,"why_hidden":"수정본 확인·재요청 단계에 따로 붙는 비용이다."},{"id":"album_pages","name":"앨범 페이지 추가(1장당)","category":"studio","typical":33000,"low":30000,"high":40000,"p10":30000,"p90":50000,"n":558,"why_hidden":"기본 앨범 페이지 수(소비자원 조사 기준 20P)를 넘으면 페이지당 추가된다."},{"id":"frame_change","name":"액자 변경·업그레이드","category":"studio","typical":250000,"low":200000,"high":275000,"p10":150000,"p90":495000,"n":370,"why_hidden":"기본 액자(조사 기준 20R)보다 크거나 다른 액자를 고르면 차액이 붙는다."},{"id":"shoot_time","name":"촬영 시간 연장(단위 미표시)","category":"studio","typical":110000,"low":100000,"high":110000,"p10":80000,"p90":150000,"n":203,"why_hidden":"촬영이 길어지면 시간 단위로 추가된다."},{"id":"night_shoot","name":"야간 촬영","category":"studio","typical":150000,"low":100000,"high":220000,"p10":82500,"p90":275000,"n":532,"why_hidden":"야간 씬은 기본 촬영에 없고 별도 옵션인 경우가 있다."},{"id":"outdoor_shoot","name":"야외 촬영","category":"studio","typical":150000,"low":110000,"high":200000,"p10":82500,"p90":275000,"n":472,"why_hidden":"야외 씬은 스튜디오 기본 촬영과 따로 계산된다."},{"id":"studio_dress_add","name":"촬영 드레스 벌수 추가(스튜디오)","category":"studio","typical":110000,"low":110000,"high":165000,"p10":85000,"p90":220000,"n":524,"why_hidden":"기본 촬영 드레스 벌수를 넘기면 추가된다."},{"id":"studio_outfit_add","name":"촬영 의상 추가(드레스 외)","category":"studio","typical":110000,"low":110000,"high":165000,"p10":100000,"p90":200000,"n":370,"why_hidden":"한복·캐주얼 등 드레스 외 의상 촬영은 별도다."},{"id":"studio_staff_pick","name":"스튜디오 작가(담당자) 지정","category":"studio","typical":175000,"low":150000,"high":220000,"p10":100000,"p90":300000,"n":459,"why_hidden":"원하는 작가를 지정하면 지정비가 붙는다."},{"id":"studio_travel","name":"촬영 출장비(스튜디오)","category":"studio","typical":200000,"low":150000,"high":220000,"p10":150000,"p90":330000,"n":161,"why_hidden":"스튜디오 밖에서 찍으면 출장비가 따로 나온다."},{"id":"sub_snap","name":"서브 스냅","category":"studio","typical":165000,"low":150000,"high":220000,"p10":150000,"p90":385000,"n":212,"why_hidden":"메인 촬영 외 추가 스냅 작가 비용이다."},{"id":"props","name":"소품 활용","category":"studio","typical":500000,"low":0,"high":610000,"p10":0,"p90":610000,"n":61,"why_hidden":"특정 소품 사용이 유료인 경우가 있다."},{"id":"bridesmaid_shoot","name":"들러리 촬영","category":"studio","typical":75000,"low":50000,"high":150000,"p10":50000,"p90":165000,"n":474,"why_hidden":"들러리·친구 동반 촬영은 별도 요금이다."},{"id":"pet_shoot","name":"반려동물 촬영","category":"studio","typical":80000,"low":50000,"high":137500,"p10":50000,"p90":150000,"n":342,"why_hidden":"반려동물 동반 촬영은 별도 요금이다."},{"id":"mobile_photo","name":"모바일용 사진 제공","category":"studio","typical":82500,"low":50000,"high":92500,"p10":0,"p90":127500,"n":139,"why_hidden":"모바일 청첩장용 사진 파일이 유료인 경우가 있다."},{"id":"studio_early","name":"얼리스타트(스튜디오)","category":"studio","typical":50000,"low":50000,"high":75000,"p10":50000,"p90":82500,"n":40,"why_hidden":"이른 시간 촬영 시작에 붙는 비용이다."},{"id":"helper_wedding","name":"헬퍼(이모님) 비용 - 본식일 1회","category":"dress","typical":250000,"low":220000,"high":250000,"p10":140000,"p90":375000,"n":279,"why_hidden":"드레스 업체 헬퍼비는 현장 지불이라 견적 합계에 안 들어가는 경우가 많다."},{"id":"helper_shoot","name":"헬퍼(이모님) 비용 - 촬영일 1회","category":"dress","typical":250000,"low":250000,"high":250000,"p10":142500,"p90":362500,"n":294,"why_hidden":"촬영날 헬퍼비도 본식과 별도로 한 번 더 나간다."},{"id":"fitting_fee","name":"드레스 피팅비(기본)","category":"dress","typical":55000,"low":55000,"high":82500,"p10":50000,"p90":100000,"n":209,"why_hidden":"드레스를 입어보는 투어 비용이 견적 밖에서 청구된다."},{"id":"fitting_extra","name":"추가 피팅비","category":"dress","typical":55000,"low":42500,"high":82500,"p10":22000,"p90":100000,"n":219,"why_hidden":"기본 횟수를 넘겨 입어보면 회당 추가된다."},{"id":"refitting","name":"재가봉비","category":"dress","typical":100000,"low":55000,"high":110000,"p10":55000,"p90":110000,"n":122,"why_hidden":"가봉을 다시 하면 별도 비용이 붙는다."},{"id":"fitting_snap","name":"가봉 스냅","category":"dress","typical":725000,"low":440000,"high":922500,"p10":275000,"p90":1000000,"n":74,"why_hidden":"가봉날 사진 촬영이 따로 유료다."},{"id":"dress_pick","name":"드레스 지정비(특정 라인·신상 지정)","category":"dress","typical":880000,"low":550000,"high":1400000,"p10":126000,"p90":2000000,"n":111,"why_hidden":"원하는 라인이나 신상 드레스를 고르면 지정비가 붙어 금액이 크게 오른다."},{"id":"dress_design_add","name":"드레스 디자인 추가(업그레이드)","category":"dress","typical":1150000,"low":696250,"high":1500000,"p10":495000,"p90":2392500,"n":192,"why_hidden":"기본 라인 밖 디자인을 고르면 추가금이 나온다. 선택품목 중 금액이 큰 편이다."},{"id":"second_dress","name":"2부 드레스","category":"dress","typical":440000,"low":300000,"high":550000,"p10":165000,"p90":770000,"n":200,"why_hidden":"본식 2부 드레스는 기본 본식 1벌과 따로 계산된다."},{"id":"first_wear","name":"퍼스트웨어(신상 첫 착용)","category":"dress","typical":970000,"low":500000,"high":1265000,"p10":330000,"p90":3000000,"n":144,"why_hidden":"신상 드레스 첫 착용 비용으로, 편차가 매우 크다."},{"id":"outdoor_wedding_dress","name":"야외 예식 드레스 비용","category":"dress","typical":150000,"low":50000,"high":220000,"p10":30000,"p90":305000,"n":71,"why_hidden":"야외 예식이면 드레스 비용이 추가된다."},{"id":"tuxedo","name":"턱시도 대여","category":"dress","typical":200000,"low":150000,"high":300000,"p10":94400,"p90":300000,"n":35,"why_hidden":"신랑 턱시도는 드레스 패키지에 안 들어가 있을 수 있다."},{"id":"shoes","name":"웨딩슈즈 대여","category":"dress","typical":0,"low":0,"high":55000,"p10":0,"p90":95000,"n":39,"why_hidden":"대부분 무료지만 일부 업체는 따로 받는다."},{"id":"accessory","name":"액세서리 대여","category":"dress","typical":225000,"low":0,"high":495000,"p10":0,"p90":495000,"n":23,"why_hidden":"액세서리(베일·티아라 등)를 따로 빌려주는 경우가 있다."},{"id":"early_start","name":"얼리스타트(이른 시간 예식일 때만)","category":"makeup","typical":135700,"low":60000,"high":165000,"p10":46400,"p90":182500,"n":223,"why_hidden":"예식 시간이 이르면 새벽 시작 비용이 당일에 붙는다."},{"id":"late_start","name":"레이트 스타트비","category":"makeup","typical":82500,"low":67375,"high":89375,"p10":50000,"p90":137500,"n":38,"why_hidden":"예식이 늦은 시간이면 늦은 시작 비용이 붙는다."},{"id":"makeup_travel","name":"메이크업 출장비","category":"makeup","typical":200000,"low":150000,"high":220000,"p10":36400,"p90":430000,"n":51,"why_hidden":"메이크업 담당자가 촬영·예식장으로 오면 출장비가 붙는다."},{"id":"makeup_staff_pick","name":"메이크업 담당자 지정","category":"makeup","typical":55000,"low":55000,"high":100000,"p10":55000,"p90":150000,"n":206,"why_hidden":"원하는 아티스트를 지정하면 지정비가 붙는다."},{"id":"holiday_fee","name":"휴무일 진행비","category":"makeup","typical":150000,"low":87500,"high":165000,"p10":25000,"p90":220000,"n":14,"why_hidden":"샵 휴무일에 진행하면 추가 비용이 붙는다."},{"id":"hair_change","name":"헤어 변형","category":"makeup","typical":330000,"low":165000,"high":405000,"p10":110000,"p90":440000,"n":82,"why_hidden":"본식 중·2부에 헤어를 바꾸면 따로 받는다."},{"id":"hairpiece_buy","name":"헤어피스 구매","category":"makeup","typical":160000,"low":130000,"high":187000,"p10":102500,"p90":220000,"n":228,"why_hidden":"헤어피스는 구매·보증금·시술비가 각각 붙을 수 있다."},{"id":"hairpiece_deposit","name":"헤어피스 보증금","category":"makeup","typical":100000,"low":50000,"high":102500,"p10":50000,"p90":110000,"n":134,"why_hidden":"대여 시 보증금이 따로 있다."},{"id":"hairpiece_apply","name":"헤어피스 시술","category":"makeup","typical":110000,"low":102500,"high":150000,"p10":65500,"p90":175000,"n":72,"why_hidden":"붙이는 시술비가 따로 있다."},{"id":"wig","name":"가발","category":"makeup","typical":100000,"low":78750,"high":110000,"p10":42000,"p90":225000,"n":81,"why_hidden":"가발 사용 시 별도 요금이다."},{"id":"bride_cut","name":"신부 커트","category":"makeup","typical":70500,"low":60000,"high":81875,"p10":50000,"p90":82500,"n":64,"why_hidden":"커트는 메이크업 기본에 포함되지 않는다."},{"id":"groom_makeup","name":"신랑 메이크업","category":"makeup","typical":50000,"low":26250,"high":55000,"p10":0,"p90":110000,"n":45,"why_hidden":"신랑 메이크업이 기본에 없는 경우가 있다."},{"id":"groom_hair","name":"신랑 헤어","category":"makeup","typical":50000,"low":30000,"high":77000,"p10":30000,"p90":110000,"n":49,"why_hidden":"신랑 헤어가 기본에 없는 경우가 있다."},{"id":"black_powder","name":"흑채","category":"makeup","typical":33000,"low":22000,"high":33000,"p10":20000,"p90":82500,"n":33,"why_hidden":"흑채 사용도 소액 추가된다."},{"id":"parent_makeup_f","name":"혼주 메이크업(여성, 1인)","category":"makeup","typical":264000,"low":212000,"high":330000,"p10":150000,"p90":352000,"n":278,"why_hidden":"혼주 메이크업은 스드메 패키지 밖이라 인원수만큼 추가된다."},{"id":"parent_makeup_m","name":"혼주 메이크업(남성, 1인)","category":"makeup","typical":82500,"low":60000,"high":99000,"p10":55000,"p90":130800,"n":275,"why_hidden":"혼주 메이크업은 스드메 패키지 밖이라 인원수만큼 추가된다."},{"id":"hall_parent_makeup","name":"혼주 헤어/메이크업(웨딩홀 선택품목)","category":"common","typical":150000,"low":null,"high":null,"p10":null,"p90":null,"n":null,"why_hidden":"예식장에서 혼주 메이크업을 따로 받는 경우가 있다."},{"id":"bouquet","name":"부케(웨딩홀 선택품목)","category":"common","typical":250000,"low":null,"high":null,"p10":null,"p90":null,"n":null,"why_hidden":"부케는 스드메가 아니라 예식장·플라워 쪽 선택품목이라 따로 나간다."},{"id":"hall_photo","name":"본식 촬영(웨딩홀 선택품목)","category":"common","typical":755000,"low":null,"high":null,"p10":null,"p90":null,"n":null,"why_hidden":"본식 사진·영상은 스튜디오 촬영과 별개로 계약한다."},{"id":"hall_photo_raw","name":"본식 원판 구매(웨딩홀 선택품목)","category":"common","typical":500000,"low":null,"high":null,"p10":null,"p90":null,"n":null,"why_hidden":"본식 원판 사진을 따로 사야 하는 경우가 있다."},{"id":"hall_dress_helper","name":"본식 드레스 도우미(웨딩홀 선택품목)","category":"common","typical":150000,"low":null,"high":null,"p10":null,"p90":null,"n":null,"why_hidden":"예식장 쪽 드레스 도우미 비용이 드레스 헬퍼비와 별도로 있을 수 있다."}],"rules":[{"id":"price_disclosure","title":"결혼서비스 가격표시 의무 (2025-11-12 시행)","text":"예식장업·결혼준비대행업(스드메 제휴업체 포함)은 기본 서비스 내용, 선택품목별 세부 내용과 요금, 계약 해제·해지 위약금과 환급 기준을 자기 홈페이지나 소비자원 참가격 중 한 곳, 그리고 계약서 표지에 표시해야 한다. 6개월 계도기간을 거쳐 2026-08-01부터 공정위가 집중점검 중이며, 위반 시 사업자에게 과태료 최대 1억원(임직원은 최대 1천만원).","source":"https://www.fnnews.com/news/202607301001048926","also":["https://www.segye.com/newsView/20251111510468","https://biz.heraldcorp.com/article/10825162"]},{"id":"price_access","title":"가격 보려고 회원가입·개인정보 요구는 위반","text":"회원가입이나 개인정보 입력을 요구하는 등 가격정보 접근을 부당하게 제한하는 것도 가격표시 의무 위반이 될 수 있다.","source":"https://biz.heraldcorp.com/article/10825162"},{"id":"planner_cancel_consumer","title":"결혼준비대행(스드메) 소비자 사정으로 해지할 때","text":"소비자분쟁해결기준: 대행 개시 전이면 총 대행요금의 10%를 빼고 환급, 개시 후면 이미 발생한 비용과 남은 금액의 10%를 빼고 환급.","source":"https://www.easylaw.go.kr/CSP/CnpClsMain.laf?csmSeq=1894&ccfNo=2&cciNo=3&cnpClsNo=1"},{"id":"planner_cancel_business","title":"결혼준비대행 업체 잘못으로 해지될 때","text":"대행 개시 전이면 계약금 환급과 총 대행요금의 10% 배상, 개시 후면 손해배상.","source":"https://www.easylaw.go.kr/CSP/CnpClsMain.laf?csmSeq=1894&ccfNo=2&cciNo=3&cnpClsNo=1"},{"id":"cooling_off_fair","title":"박람회·온라인 계약은 청약철회 가능","text":"업체 영업장소가 아닌 결혼박람회에서 계약했으면 계약서를 받은 날부터 14일(방문판매법), 홈페이지 등 온라인으로 계약했으면 7일(전자상거래법) 안에 위약금 없이 철회할 수 있다. 단 업체 자기 영업장에서 연 박람회는 방문판매법 철회권이 보장되지 않는다.","source":"https://www.easylaw.go.kr/CSP/CnpClsMain.laf?csmSeq=1894&ccfNo=2&cciNo=3&cnpClsNo=1"},{"id":"planner_change","title":"담당 플래너가 일방적으로 바뀌면 계약금 환급","text":"업체가 동의 없이 합리적 이유 없이 웨딩플래너를 바꾼 경우, '계약금 환급 불가' 약관은 무효로 보고 계약을 해제해 계약금 전액을 돌려받을 수 있다(소비자원 분쟁조정 사례).","source":"https://www.easylaw.go.kr/CSP/CnpClsMain.laf?csmSeq=1894&ccfNo=2&cciNo=3&cnpClsNo=1"},{"id":"standard_contract_2025","title":"결혼준비대행업 표준약관·표준계약서 (2025-04-03 제정)","text":"계약서 앞면에 스드메 기본서비스와 추가 옵션을 한눈에 표시하고, 사진파일 구입비·드레스 피팅비·메이크업 얼리스타트비를 기본서비스에 포함한다. 위약금은 귀책 사유와 대행 개시 여부에 따라 구체적으로 적고, 제휴업체 선정 전후로 위약금 기준을 다시 안내하고 동의를 받아야 한다. 권고 사항이라 업체가 쓰는지 확인 필요.","source":"https://www.korea.kr/news/policyNewsView.do?newsId=148941326","also":["https://www.hankookilbo.com/News/Read/A2025040310230000055"]},{"id":"unfair_terms_2024","title":"18개 결혼준비대행 업체 불공정약관 시정 (2024-11-12)","text":"공정위가 계약금 환불 불가 조항 삭제, 필수 옵션(사진파일·피팅비·얼리스타트) 기본서비스 포함, '업체별 위약금 발생' 같은 막연한 문구를 구체 기준으로 바꾸도록 시정했다. 견적서에 이런 문구가 있으면 문제 삼을 수 있다.","source":"https://www.korea.kr/briefing/policyBriefingView.do?newsId=156659944"},{"id":"hall_cancel_consumer","title":"예식장 소비자 사정으로 해제할 때 (2025-12 개정 기준)","text":"계약 후 15일 이내 철회는 위약금 없이 계약금 전액 환급. 그 뒤에는 계약금은 돌려받고 아래 비율을 위약금으로 낸다: 예식 150일 전까지 계약금 환급(15일 이후엔 사전 서면 고지·동의한 계약추진비만 공제 가능), 60일 전까지 총비용 10%, 30일 전까지 20%, 29일 전부터 40%, 9일 전부터 50%, 당일 70% 배상.","source":"https://www.easylaw.go.kr/CSP/CnpClsMain.laf?csmSeq=1894&ccfNo=2&cciNo=3&cnpClsNo=2","also":["https://www.korea.kr/news/policyNewsView.do?newsId=148956738"]},{"id":"hall_cancel_business","title":"예식장 잘못으로 해제될 때","text":"150일 전까지 계약금 환급, 60일 전까지 계약금+총비용 10%, 30일 전까지 20%, 29일 전부터 당일까지 총비용 70% 배상.","source":"https://www.easylaw.go.kr/CSP/CnpClsMain.laf?csmSeq=1894&ccfNo=2&cciNo=3&cnpClsNo=2"},{"id":"hall_no_forced_bundle","title":"예식장이 스드메 이용을 조건으로 걸 수 없음","text":"예식장 표준약관상 사업자는 드레스·화장·사진 등 부대서비스 이용을 조건으로 예식장을 빌려줄 수 없고, 계약금은 예식비용의 10% 이하가 기준이다.","source":"https://www.easylaw.go.kr/CSP/CnpClsMain.laf?csmSeq=1894&ccfNo=2&cciNo=3&cnpClsNo=2"},{"id":"card_payment","title":"현금보다 신용카드 결제","text":"업체가 정당한 해제 요구를 거부하면 카드사에 알리고 대금 결제를 거부할 수 있으므로 현금보다 신용카드 결제가 유리하다.","source":"https://www.easylaw.go.kr/CSP/CnpClsMain.laf?csmSeq=1894&ccfNo=2&cciNo=3&cnpClsNo=1"},{"id":"complaint","title":"피해 상담·신고: 1372 소비자상담센터","text":"결혼서비스 피해는 1372 소비자상담센터(국번 없이 1372)로 상담하고 한국소비자원 피해구제를 신청할 수 있다. 2025년 결혼서비스 피해구제 신청의 82.4%가 계약 해지·위약금 문제였다.","source":"https://www.mt.co.kr/economy/2026/04/22/2026042209001425532"},{"id":"guideline_not_law","title":"분쟁해결기준·표준약관은 기준(권고)","text":"소비자분쟁해결기준과 표준약관은 분쟁 해결의 기준·권고이며 당사자 간 별도 계약이 있으면 그 계약이 우선 적용될 수 있다. 그래서 계약서 위약금 조항을 서명 전에 확인해야 한다.","source":"https://www.easylaw.go.kr/CSP/CnpClsMain.laf?csmSeq=1894&ccfNo=2&cciNo=3&cnpClsNo=2"}],"questions":["이 견적에 원본 사진파일, 드레스 피팅비, 메이크업 얼리스타트비가 들어 있나요? 따로라면 각각 얼마인가요?","헬퍼(이모님) 비용은 촬영날·본식날 각각 얼마이고, 출장비·주차비가 따로 붙나요?","선택품목 전체 가격표(항목별 금액)를 계약서 표지나 서면으로 받을 수 있나요?","결혼준비대행업 표준약관(공정위)을 쓰시나요?","제가 해지하면 대행 개시 전·후 각각 위약금이 얼마인지 계약서에 적혀 있나요?","스튜디오·드레스·메이크업 업체를 고르기 전과 고른 뒤 업체별 위약금은 각각 얼마인가요? 고른 뒤 다시 안내받고 동의하게 되나요?","드레스 기본가로 고를 수 있는 라인은 어디까지이고, 드레스 지정비·디자인 추가·퍼스트웨어 비용은 얼마인가요?","메이크업 가격은 원장·부원장·실장 중 누구 기준인가요?","앨범은 몇 페이지, 액자는 어떤 크기 기준인가요? 수정본은 몇 장까지 기본인가요?","촬영 시간은 몇 시간이고, 야간·야외 촬영과 촬영 의상 추가는 얼마인가요?","예식 시간이 이른(늦은) 편인데 얼리스타트·레이트스타트 비용이 붙나요?","혼주 메이크업, 신랑 헤어·메이크업, 헤어 변형은 포함인가요?","오늘 박람회 장소가 이 업체의 영업장인가요? (아니면 14일 안에 위약금 없이 철회 가능)","담당 플래너가 바뀌면 위약금 없이 해지할 수 있나요?","신용카드로 결제할 수 있나요?","참가격에 올린 우리 지역 평균·중간 가격과 비교하면 이 견적은 어느 정도인가요?"]};
+
+// ---------- 설정 ----------
+const STD_INCLUDED = new Set(["raw_data","fitting_fee","early_start"]); // 공정위 표준약관: 기본서비스 포함 권고
+const CORE = [
+  ["raw_data","unknown"],["fitting_fee","unknown"],["early_start","none"],
+  ["helper_shoot","unknown"],["helper_wedding","unknown"],
+  ["retouched_purchase","none"],["album_pages","none"],["frame_change","none"],
+  ["dress_pick","none"],["dress_design_add","none"],["first_wear","none"],["second_dress","none"],
+  ["makeup_staff_pick","none"],["parent_makeup_f","none"],["mobile_photo","none"]
+];
+const FALLBACK = {"서울(강남외)":"수도권","경상도":"비수도권","제주도":"비수도권"};
+const MIN_N = 30;
+const CAT = {studio:"스튜디오",dress:"드레스",makeup:"메이크업",common:"예식장 쪽 (참고)"};
+const SAMPLE = {region:"서울(강남)",mode:"pkg",pkg:3900000,
+  states:{raw_data:["paid",330000],dress_pick:["paid",1100000],fitting_fee:["unknown"],early_start:["unknown"],helper_shoot:["unknown"],helper_wedding:["included"],album_pages:["paid",88000,2]}};
+
+const A = Object.fromEntries(D.addons.map(a=>[a.id,a]));
+const R = Object.fromEntries(D.regions.map(r=>[r.name,r]));
+const $ = id=>document.getElementById(id);
+const DISP={"서울(강남)":"서울(강남3구)","서울(강남외)":"서울(강남3구 외)"};
+const disp=n=>DISP[n]||n;
+
+// ---------- 숫자 ----------
+const num = s => { const n = parseInt(String(s).replace(/[^0-9]/g,""),10); return isNaN(n)?0:n; };
+const comma = n => n.toLocaleString("ko-KR");
+function man(n){ // 원 → "33만원", "13.6만원", "1,100만원"
+  if(n==null) return "-";
+  const m = n/10000;
+  const s = Math.abs(m)>=100 ? comma(Math.round(m)) : (Math.round(m*10)/10).toLocaleString("ko-KR");
+  return s+"만원";
+}
+function bindMoney(el){
+  el.addEventListener("input",()=>{const n=num(el.value);el.value=n?comma(n):"";render();});
+}
+
+// ---------- 화면 만들기 ----------
+$("basisPeriod").textContent = D.period.replace(/ \(.*\)/,"");
+$("footPeriod").textContent = D.period;
+$("basisN").textContent = comma(R["전국"].package_n);
+$("basisItems").textContent = D.addons.filter(a=>a.category!=="common").length;
+
+const ORDER = ["전국","수도권","비수도권","서울(강남)","서울(강남외)","경기도","인천","부산","대구","울산","경상도","대전","충청도","전북","전남광주","강원도","제주도"];
+ORDER.filter(n=>R[n]).forEach(n=>{const o=document.createElement("option");o.value=n;o.textContent=disp(n)+(R[n].package_n<MIN_N?" (표본 적음)":"");$("region").append(o);});
+
+function itemRow(a, def){
+  const el = document.createElement("div"); el.className="item"; el.dataset.id=a.id;
+  const std = STD_INCLUDED.has(a.id) ? '<span class="tag">표준약관상 기본 포함(권고)</span>' : "";
+  const range = (a.low!=null && a.low!==a.high) ? `보통 ${man(a.typical)} (${man(a.low)}~${man(a.high)})` : `보통 ${man(a.typical)}`;
+  el.innerHTML = `<div class="nm">${esc(a.name)}${std}<small>${range}</small></div>
+    <div class="ctl">
+      <div class="seg" role="radiogroup" aria-label="${esc(a.name)}">
+        ${[["included","포함"],["paid","따로"],["unknown","모름"],["none","안 함"]].filter(([v])=>!(a.category==="common"&&v==="unknown")).map(([v,t])=>
+          `<input type="radio" name="st_${a.id}" id="st_${a.id}_${v}" value="${v}" ${v===def?"checked":""}><label for="st_${a.id}_${v}">${t}</label>`).join("")}
+      </div>
+      <div class="amt" ${def==="paid"?"":"hidden"} style="display:flex;gap:6px;align-items:center"><div class="won" style="width:120px"><input type="text" inputmode="numeric" id="amt_${a.id}" aria-label="${esc(a.name)} 금액(합계)"><span>원</span></div><span class="hint">×</span><input type="text" inputmode="numeric" id="qty_${a.id}" aria-label="${esc(a.name)} 개수" value="1" style="width:44px;text-align:center"><span class="hint">개</span></div>
+    </div>`;
+  el.querySelectorAll('input[type=radio]').forEach(r=>r.addEventListener("change",()=>{
+    const amt = el.querySelector(".amt"); amt.hidden = (r.value!=="paid");
+    if(r.value==="paid") el.querySelector(".amt input").focus();
+    render();
+  }));
+  bindMoney(el.querySelector(".amt .won input"));
+  el.querySelector(`#qty_${a.id}`).addEventListener("input",render);
+  return el;
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+
+const coreIds = new Set(CORE.map(c=>c[0]));
+CORE.forEach(([id,def])=>A[id] && $("coreItems").append(itemRow(A[id],def)));
+const rest = D.addons.filter(a=>!coreIds.has(a.id));
+$("moreCount").textContent = rest.length;
+["studio","dress","makeup","common"].forEach(c=>{
+  const list = rest.filter(a=>a.category===c); if(!list.length) return;
+  const h=document.createElement("div"); h.className="cat"; h.textContent=CAT[c]; $("moreItems").append(h);
+  const box=document.createElement("div"); box.className="items"; list.forEach(a=>box.append(itemRow(a,"none"))); $("moreItems").append(box);
+});
+
+["pkg","studio","dress","makeup"].forEach(id=>bindMoney($(id)));
+$("region").addEventListener("change",render);
+document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener("change",()=>{
+  const sep = $("modeSep").checked; $("pkgBox").hidden=sep; $("sepBox").hidden=!sep; render();
+}));
+
+// 규칙
+D.rules.forEach(r=>{
+  const d=document.createElement("details");
+  d.innerHTML=`<summary>${esc(r.title)}</summary><p>${esc(r.text)} <a href="${esc(r.source)}" target="_blank" rel="noopener">출처</a></p>`;
+  $("rules").append(d);
+});
+// 출처
+const srcs = new Map();
+srcs.set("https://www.price.go.kr/tprice/portal/wedding/areaStatisticDetailSDM.do","한국소비자원 참가격 · 결혼서비스 지역별 가격");
+srcs.set("https://www.kca.go.kr/webzine/board/view?menuId=MENU00307&linkId=868&div=kca_2507","(참고) 한국소비자원 · 2025-04 결혼서비스 가격 조사");
+srcs.set(D.national.source,"(참고) 2024 정부 조사 · 스드메 기본금·추가금 평균");
+D.rules.forEach(r=>{ if(!srcs.has(r.source)) srcs.set(r.source, r.title); });
+srcs.forEach((t,u)=>{const li=document.createElement("li");li.innerHTML=`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`;$("sources").append(li);});
+
+// ---------- 상태 읽기 ----------
+function readState(){
+  const items = [...document.querySelectorAll(".item")].map(el=>{
+    const id=el.dataset.id, st=el.querySelector('input[type=radio]:checked').value;
+    const q=Math.max(1,num(el.querySelector(`#qty_${id}`).value)||1); const amt=num(el.querySelector(".amt .won input").value); return {a:A[id], st, amt, qty:q, unit:Math.round(amt/q)};
+  });
+  return {region:$("region").value, sep:$("modeSep").checked, pkg:num($("pkg").value),
+    studio:num($("studio").value), dress:num($("dress").value), makeup:num($("makeup").value), items};
+}
+function refRegion(name){
+  const r=R[name];
+  if(r.package_median==null || r.package_n<MIN_N){ const f=FALLBACK[name]||"전국"; return {r:R[f], used:f, note:`${name}은(는) 계약 표본이 ${r.package_n||0}건뿐이라 ${f} 값으로 비교했어요.`}; }
+  return {r, used:name, note: r.package_n<100 ? `${name} 계약 표본이 ${r.package_n}건이라 오차가 클 수 있어요.` : ""};
+}
+
+// ---------- 판정 ----------
+function position(v, r){
+  if(v<r.package_p25) return ["ok","싼 편",`하위 25%보다 낮아요`];
+  if(v<=r.package_p75) return ["mid","보통",`가운데 50% 안에 있어요`];
+  if(r.package_p90!=null && v>r.package_p90) return ["bad","상위 10%",`계약 10건 중 9건보다 비싸요`];
+  return ["warn","비싼 편",`상위 25% 안에 들어요`];
+}
+function scaleSVG(v, r){
+  const lo=Math.min(r.package_p10, v)*0.92, hi=Math.max(r.package_p90??r.package_p75*1.2, v)*1.05;
+  const W=520, x=n=>24+(n-lo)/(hi-lo)*(W-48);
+  const p90 = r.package_p90??r.package_p75;
+  return `<svg class="scale" viewBox="0 0 ${W} 92" role="img" aria-label="지역 가격 분포와 내 견적 위치">
+    <line x1="${x(r.package_p10)}" x2="${x(p90)}" y1="46" y2="46" stroke="var(--band-mid)" stroke-width="2"/>
+    <rect x="${x(r.package_p25)}" y="34" width="${Math.max(2,x(r.package_p75)-x(r.package_p25))}" height="24" rx="4" fill="var(--band)" stroke="var(--band-mid)"/>
+    <line x1="${x(r.package_median)}" x2="${x(r.package_median)}" y1="30" y2="62" stroke="var(--ink)" stroke-width="2"/>
+    <text x="${x(r.package_p10)}" y="80" text-anchor="middle">하위10% ${man(r.package_p10)}</text>
+    <text x="${x(r.package_median)}" y="80" text-anchor="middle">중간 ${man(r.package_median)}</text>
+    <text x="${x(p90)}" y="80" text-anchor="middle">상위10% ${man(p90)}</text>
+    <path class="you" d="M ${x(v)} 30 l -7 -10 h 14 z"/>
+    <text class="youlbl" x="${Math.min(Math.max(x(v),40),W-40)}" y="14" text-anchor="middle">내 견적 ${man(v)}</text>
+  </svg>`;
+}
+
+let lastSummary="", lastQs="";
+function render(){
+  const s=readState(); let {r,used,note}=refRegion(s.region); used=disp(used); note=note.replace(/서울\(강남외\)/g,disp("서울(강남외)")).replace(/서울\(강남\)(?!3)/g,disp("서울(강남)"));
+  $("regionUsed").textContent = `비교 기준: ${used}`;
+  const base = s.sep ? s.studio+s.dress+s.makeup : s.pkg;
+
+  // 1. 기본가 판정
+  let vHTML="", scale="", verdictLine="";
+  if(!base){
+    vHTML = `<p class="big">견적 금액을 넣으면 판정이 나와요</p><p class="note">${used} 스드메 패키지 중간값은 ${man(r.package_median)}이에요.</p>`;
+  } else if(!s.sep){
+    const [cls,label,desc]=position(base,r);
+    const diff = Math.round((base/r.package_median-1)*100);
+    verdictLine = `기본가 ${man(base)}: ${used} 중간(${man(r.package_median)})보다 ${Math.abs(diff)}% ${diff>=0?"비쌈":"저렴"} [${label}]`;
+    vHTML = `<span class="chip ${cls}">기본가 ${label}</span>
+      <p class="big">${used} 중간값보다 ${diff===0?"딱 중간이에요":`<span style="color:var(--${cls==="mid"?"ink":cls==="ok"?"ok":cls})">${Math.abs(diff)}% ${diff>0?"비싸요":"저렴해요"}</span>`}</p>
+      <p class="note">${desc}. 계약 ${comma(r.package_n)}건 기준.</p>${note?`<p class="warnbox">${note}</p>`:""}`;
+    scale = scaleSVG(base,r);
+  } else {
+    const R0=R[s.region];
+    const parts=[["스튜디오",s.studio,r.studio,R0.studio_n],["드레스",s.dress,r.dress,R0.dress_n],["메이크업",s.makeup,r.makeup,R0.makeup_n]].filter(p=>p[1]);
+    const thin=parts.filter(p=>p[3]!=null&&p[3]<30).map(p=>`${p[0]} ${p[3]}건`);
+    vHTML = `<p class="big">항목별로 ${used} 중간값과 비교했어요</p>` + parts.map(([n,v,m])=>{
+      const d=Math.round((v/m-1)*100); const cls = d>25?"bad":d>10?"warn":d<-10?"ok":"mid";
+      return `<span class="chip ${cls}">${n} ${man(v)} · 중간 ${man(m)} 대비 ${d>=0?"+":""}${d}%</span>`;}).join("")
+      + (thin.length?`<p class="warnbox">${disp(s.region)} 표본이 적어요(${thin.join(", ")}). 참고만 하세요.</p>`:"")
+      + `<p class="note">따로 계약은 중간값과만 비교해요. 기준: 스튜디오 20P 앨범·20R 액자, 드레스 본식 1벌+촬영 3벌, 메이크업 원장급(본식+촬영). 실장급이면 원래 더 싸요.</p>${note?`<p class="warnbox">${note}</p>`:""}`;
+    verdictLine = parts.map(([n,v,m])=>`${n} ${man(v)}(중간 ${man(m)})`).join(", ");
+  }
+  $("verdict").innerHTML=vHTML; $("scaleBox").innerHTML=scale;
+
+  // 2. 총액
+  const paid = s.items.filter(i=>i.st==="paid" && i.amt);
+  const unknown = s.items.filter(i=>i.st==="unknown");
+  const paidSum = paid.reduce((t,i)=>t+i.amt,0);
+  const unkTyp = unknown.reduce((t,i)=>t+(i.a.typical||0),0);
+  const unkLo = unknown.reduce((t,i)=>t+(i.a.low??i.a.typical??0),0);
+  const unkHi = unknown.reduce((t,i)=>t+(i.a.high??i.a.typical??0),0);
+  const total = base+paidSum+unkTyp;
+  $("total").innerHTML = `
+    <div class="ln"><span>기본가</span><span>${base?comma(base)+"원":"-"}</span></div>
+    <div class="ln"><span>견적서에 적힌 추가금 (${paid.length}개)</span><span>${comma(paidSum)}원</span></div>
+    <div class="ln"><span>안 적힌 추가금, 붙을 경우 (${unknown.length}개)</span><span>${comma(unkTyp)}원${unknown.length?`<br><small class="note">${man(unkLo)}~${man(unkHi)}</small>`:""}</span></div>
+    <div class="ln sum"><span>예상 총액</span><span>${base?comma(total)+"원":"-"}</span></div>`;
+
+  $("dockTotal").textContent = base ? comma(total)+"원" : "-";
+
+  // 3. 짚어볼 것
+  const flags=[];
+  s.items.forEach(i=>{
+    const a=i.a;
+    if(i.st==="paid" && STD_INCLUDED.has(a.id))
+      flags.push(["warn",`${a.name}을(를) 따로 받고 있어요`,`공정위 결혼준비대행업 표준약관은 사진파일·피팅비·얼리스타트비를 기본서비스에 넣도록 권고해요(강제는 아님). 기본가에 넣어 달라고 요청할 때 근거로 말할 수 있어요.`]);
+    if(i.st==="unknown")
+      flags.push(["warn",`${a.name}: 견적서에 없음`,`${a.why_hidden} 보통 ${man(a.typical)}${(a.low!=null&&a.low!==a.high)?` (${man(a.low)}~${man(a.high)})`:""}.`]);
+    if(i.st==="paid" && i.amt && a.high!=null){
+      const u=i.unit, lab=i.qty>1?`${a.name} 1개당 ${man(u)}`:`${a.name} ${man(u)}`;
+      if(a.p90!=null && u>a.p90) flags.push(["bad",`${lab}: 상위 10%보다 비싸요`,`보통 ${man(a.low)}~${man(a.high)}, 중간 ${man(a.typical)}.`]);
+      else if(u>a.high) flags.push(["bad",`${lab}: 비싼 편`,`보통 ${man(a.low)}~${man(a.high)}, 중간 ${man(a.typical)}.`]);
+      else if(u<a.low) flags.push(["ok",`${lab}: 싼 편`,`보통 ${man(a.low)}~${man(a.high)}.`]);
+    }
+  });
+  flags.sort((x,y)=>({bad:0,warn:1,ok:2}[x[0]]-{bad:0,warn:1,ok:2}[y[0]]));
+  $("flags").innerHTML = flags.length ? flags.map(([c,t,sub])=>`<div class="flag ${c}"><b>${esc(t)}</b><span class="sub">${esc(sub)}</span></div>`).join("")
+    : `<div class="flag ok"><b>걸리는 항목이 없어요</b><span class="sub">그래도 아래 질문으로 계약서에 적어 달라고 하세요.</span></div>`;
+
+  // 4. 질문
+  const qs=[];
+  unknown.forEach(i=>qs.push(`${i.a.name}이(가) 견적에 포함인가요? 따로라면 얼마인가요?`));
+  paid.filter(i=>STD_INCLUDED.has(i.a.id)).forEach(i=>qs.push(`표준약관은 ${i.a.name}을(를) 기본서비스에 넣도록 하는데, 기본가에 포함해 주실 수 있나요?`));
+  [2,4,5,13,14].forEach(k=>D.questions[k] && qs.push(D.questions[k]));
+  $("qs").innerHTML = qs.map(q=>`<li>${esc(q)}</li>`).join("");
+  lastQs = qs.map((q,i)=>`${i+1}. ${q}`).join("\n");
+
+  lastSummary = [`[스드메 견적 검사 결과] 기준: 참가격 ${$("basisPeriod").textContent}, ${used}`,
+    verdictLine||"(기본가 미입력)",
+    `견적서 추가금 ${man(paidSum)} + 안 적힌 추가금 예상 ${man(unkTyp)}`,
+    `예상 총액 ${base?man(total):"-"}`,
+    ...flags.filter(f=>f[0]!=="ok").slice(0,5).map(f=>"· "+f[1])].join("\n");
+}
+
+// ---------- 예시 / 비우기 ----------
+function setItem(id,st,amt,q){
+  const el=document.querySelector(`.item[data-id="${id}"]`); if(!el) return;
+  el.querySelector(`input[value="${st}"]`).checked=true;
+  el.querySelector(".amt").hidden = st!=="paid";
+  el.querySelector(".amt .won input").value = amt?comma(amt):""; el.querySelector(`#qty_${id}`).value = String(q||1);
+}
+function loadSample(){
+  $("region").value=SAMPLE.region; $("modePkg").checked=true; $("pkgBox").hidden=false; $("sepBox").hidden=true;
+  $("pkg").value=comma(SAMPLE.pkg);
+  Object.entries(SAMPLE.states).forEach(([id,[st,amt,q]])=>setItem(id,st,amt,q));
+}
+$("clearBtn").addEventListener("click",()=>{
+  ["pkg","studio","dress","makeup"].forEach(id=>$(id).value="");
+  CORE.forEach(([id,def])=>setItem(id,def));
+  rest.forEach(a=>setItem(a.id,"none"));
+  $("sampleBar").hidden=true; render(); $("pkg").focus();
+});
+
+// ---------- 복사 ----------
+async function copy(text){
+  $("fallback").hidden=true;
+  try{ await navigator.clipboard.writeText(text); const c=$("copied"); c.hidden=false; setTimeout(()=>c.hidden=true,1800); }
+  catch(e){ const f=$("fallback"); f.value=text; f.hidden=false; f.focus(); f.select(); }
+}
+$("copyQs").addEventListener("click",()=>copy(lastQs));
+$("copySum").addEventListener("click",()=>copy(lastSummary));
+$("form").addEventListener("submit",e=>e.preventDefault());
+
+loadSample(); render();
+</script>
+
+</body></html>
