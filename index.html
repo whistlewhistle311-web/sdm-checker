@@ -139,7 +139,9 @@ section.rules{margin-top:28px;display:grid;gap:10px}
 @media (min-width:900px){.dock{display:none}}
 @media (max-width:899px){.wrap{padding-block:28px 96px}}
 footer{margin-top:28px;font-size:12.5px;color:var(--muted);display:grid;gap:8px;max-width:80ch}
-footer ul{margin:0;padding-left:18px}
+footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.foot-sec{display:grid;gap:6px;padding-top:12px;border-top:1px solid var(--line)}
+.foot-sec h2{font-size:13.5px;margin:0;color:var(--ink)}
 @media (prefers-reduced-motion:no-preference){.chip,.big{transition:color .2s}}
 </style>
 
@@ -149,6 +151,7 @@ footer ul{margin:0;padding-left:18px}
     <h1>스드메 견적 검사기</h1>
     <p class="lede">받은 스튜디오·드레스·메이크업 견적을 넣으면, 한국소비자원이 업체를 조사해 모은 실제 계약금액과 비교하고, 견적서에 안 적힌 추가금이 붙을 경우의 <b>예상 총액</b>과 계약 전에 물어볼 질문을 보여줘요.</p>
     <div class="basis">
+      <span>출처 <b>한국소비자원 참가격</b></span>
       <span>기준 <b id="basisPeriod"></b></span>
       <span>8월 스드메 패키지 계약 <b id="basisN"></b>건의 중간값·분포</span><span>(소비자원: 전체 시장 대표값은 아님)</span>
       <span>선택품목 <b id="basisItems"></b>개 가격</span>
@@ -227,8 +230,23 @@ footer ul{margin:0;padding-left:18px}
   </section>
 
   <footer>
-    <p>이 페이지는 참고용이에요. 법률 자문이 아니며, 실제 계약은 계약서 조항이 먼저 적용될 수 있어요. 피해 상담은 국번 없이 <b>1372</b>(소비자상담센터).</p>
-    <p>데이터: 한국소비자원 참가격 결혼서비스 가격정보(<span id="footPeriod"></span>), 한국소비자원 2025-04 조사, 법제처 찾기쉬운 생활법령, 공정위 발표. 원본 링크:</p>
+    <section class="foot-sec" aria-labelledby="fSrc">
+      <h2 id="fSrc">출처와 주의</h2>
+      <p>가격은 <b>한국소비자원 참가격</b>의 결혼서비스 가격정보(<span id="footPeriod"></span>)를 정리한 것이에요. 업체가 자료를 고치거나 새로 내면 바뀔 수 있고, 성수기·비수기·요일·시간대 등에 따라 실제 계약 금액은 다를 수 있어요. 자세한 안내는 참가격 공지 <a href="https://www.price.go.kr/tprice/portal/board/BoardReadView.do?boardTypeCode=0090000121&amp;boardSeq=37770" target="_blank" rel="noopener">'결혼서비스 중요정보 공개 안내'</a>를 확인해 주세요.</p>
+      <p>이 페이지는 참고용이에요. 법률 자문이 아니며, 실제 계약은 계약서 조항이 먼저 적용될 수 있어요. 피해 상담은 국번 없이 <b>1372</b>(소비자상담센터).</p>
+    </section>
+    <section class="foot-sec" aria-labelledby="fFix">
+      <h2 id="fFix">틀린 곳 알려주기 (정정 요청)</h2>
+      <ul>
+        <li><b>이용하시는 분</b>: 숫자나 설명이 틀려 보이면 인스타그램 <a href="https://www.instagram.com/sdm.check/" target="_blank" rel="noopener">@sdm.check</a> DM으로 어느 부분인지 알려 주세요. 원자료와 대조해 고치고, 고친 내용과 날짜를 이 페이지에 적어 둘게요.</li>
+        <li><b>업체·대행사</b>: 원자료는 각 업체가 참가격에 낸 자료예요. 가격이 바뀌었다면 한국소비자원(<a href="mailto:wedding@kca.go.kr">wedding@kca.go.kr</a>)에 수정 자료를 내 주세요. 참가격에 반영되면 여기도 다음 갱신 때 바뀌어요. 저희에게도 DM 주시면 확인 후 먼저 표시해 둘게요.</li>
+      </ul>
+    </section>
+    <section class="foot-sec" aria-labelledby="fPriv">
+      <h2 id="fPriv">개인정보</h2>
+      <p>입력한 견적은 이 화면 안에서만 계산하고 어디에도 저장·전송하지 않아요. 회원가입·쿠키·방문 통계 도구도 쓰지 않아요. 글꼴 파일만 구글 폰트에서 불러오며, 이때 구글에 접속 정보(IP 등)가 전달될 수 있어요. '복사' 버튼은 내 기기 클립보드에만 넣어요.</p>
+    </section>
+    <p>원본 링크 (최종 갱신 <span id="footUpdated"></span>):</p>
     <ul id="sources"></ul>
   </footer>
 </div>
@@ -274,7 +292,8 @@ function bindMoney(el){
 
 // ---------- 화면 만들기 ----------
 $("basisPeriod").textContent = D.period.replace(/ \(.*\)/,"");
-$("footPeriod").textContent = D.period;
+$("footPeriod").textContent = D.period.replace(/^참가격\s*/,"").replace(" (",", ").replace(/\)$/,"");
+$("footUpdated").textContent = D.updated;
 $("basisN").textContent = comma(R["전국"].package_n);
 $("basisItems").textContent = D.addons.filter(a=>a.category!=="common").length;
 
@@ -329,6 +348,7 @@ D.rules.forEach(r=>{
 // 출처
 const srcs = new Map();
 srcs.set("https://www.price.go.kr/tprice/portal/wedding/areaStatisticDetailSDM.do","한국소비자원 참가격 · 결혼서비스 지역별 가격");
+srcs.set("https://www.price.go.kr/tprice/portal/board/BoardReadView.do?boardTypeCode=0090000121&boardSeq=37770","한국소비자원 참가격 · 결혼서비스 중요정보 공개 안내(공지)");
 srcs.set("https://www.kca.go.kr/webzine/board/view?menuId=MENU00307&linkId=868&div=kca_2507","(참고) 한국소비자원 · 2025-04 결혼서비스 가격 조사");
 srcs.set(D.national.source,"(참고) 2024 정부 조사 · 스드메 기본금·추가금 평균");
 D.rules.forEach(r=>{ if(!srcs.has(r.source)) srcs.set(r.source, r.title); });
@@ -450,7 +470,8 @@ function render(){
     verdictLine||"(기본가 미입력)",
     `견적서 추가금 ${man(paidSum)} + 안 적힌 추가금 예상 ${man(unkTyp)}`,
     `예상 총액 ${base?man(total):"-"}`,
-    ...flags.filter(f=>f[0]!=="ok").slice(0,5).map(f=>"· "+f[1])].join("\n");
+    ...flags.filter(f=>f[0]!=="ok").slice(0,5).map(f=>"· "+f[1]),
+    "출처: 한국소비자원 참가격 (업체 자료 갱신·성수기 등에 따라 실제 금액은 다를 수 있음)"].join("\n");
 }
 
 // ---------- 예시 / 비우기 ----------
@@ -484,5 +505,4 @@ $("form").addEventListener("submit",e=>e.preventDefault());
 
 loadSample(); render();
 </script>
-
 </body></html>
