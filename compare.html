@@ -56,7 +56,7 @@ header.top{display:grid;gap:10px;max-width:72ch}
 .notice b{font-weight:600}
 .notice .src{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
 
-.app{display:grid;gap:20px;grid-template-columns:1fr}
+.app{display:grid;gap:20px;grid-template-columns:1fr;min-height:100vh}
 @media (min-width:900px){.app{grid-template-columns:minmax(0,320px) minmax(0,1fr);align-items:start}
   .side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);max-height:calc(100vh - 32px)}}
 .side{background:var(--paper);border:0;border-radius:var(--r);padding:14px;display:grid;gap:10px;grid-template-rows:auto auto auto minmax(0,1fr);min-width:0}
