@@ -78,6 +78,7 @@ header.top{display:grid;gap:14px;padding:24px 8px 28px;max-width:40em}
 .btn.primary{background:var(--accent);color:var(--accent-ink)}
 .btn.primary:hover{background:var(--accent-hover)}
 .btn.big{min-height:56px;font-size:18px;width:100%}
+a.btn{display:flex;align-items:center;justify-content:center;text-decoration:none;box-sizing:border-box}
 
 .field{display:grid;gap:8px}
 .field>label,.lbl,legend{font-size:16px;font-weight:700;color:var(--ink);padding:0}
@@ -283,8 +284,12 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
         <h3 style="margin-bottom:10px">계약 전에 물어볼 것</h3>
         <ol class="qs" id="qs"></ol>
       </div>
+      <div class="apply-here">
+        <a class="btn primary big" id="applyBtn" href="/apply/" target="_blank" rel="noopener">이 결과로 무료 검토 받기</a>
+        <p class="note" style="margin-top:8px">누르면 이 결과가 복사되고 인스타 DM 창이 열려요. 붙여넣기만 하면 신청 끝이에요. 이름이나 연락처는 받지 않아요.</p>
+      </div>
       <div class="actions">
-        <button type="button" class="btn primary" id="copyQs">질문 복사</button>
+        <button type="button" class="btn" id="copyQs">질문 복사</button>
         <button type="button" class="btn" id="copySum">결과 복사 (카톡 공유용)</button>
         <span class="copied" id="copied" hidden>복사했어요</span>
       </div>
@@ -515,7 +520,7 @@ function render(){
   } else if(!s.sep){
     const [cls,label,desc]=position(base,r);
     const diff = Math.round((base/r.package_median-1)*100);
-    verdictLine = `기본가 ${man(base)}: ${used} 중간(${man(r.package_median)})보다 ${Math.abs(diff)}% ${diff>=0?"비쌈":"저렴"} [${label}]`;
+    verdictLine = `기본가 ${man(base)}: ${used} 중간(${man(r.package_median)})${diff===0?"과 같음":"보다 "+Math.abs(diff)+"% "+(diff>0?"비쌈":"저렴")} [${label}]`;
     vHTML = `<span class="chip ${cls}">기본가 ${label}</span>
       <p class="big">${diff===0?used+" ":used+" 중간값보다 "}${diff===0?"딱 중간값이에요":`<span style="color:var(--${cls==="mid"?"ink":cls==="ok"?"ok":cls})">${Math.abs(diff)}% ${diff>0?"비싸요":"저렴해요"}</span>`}</p>
       <p class="note">${desc}. 계약 ${comma(r.package_n)}건 기준.</p>${note?`<p class="warnbox">${note}</p>`:""}`;
@@ -576,7 +581,7 @@ function render(){
   $("qs").innerHTML = qs.map(q=>`<li>${esc(q)}</li>`).join("");
   lastQs = qs.map((q,i)=>`${i+1}. ${q}`).join("\n");
 
-  lastSummary = [`[스드메 견적 검사 결과] 기준: 참가격 ${$("basisPeriod").textContent}, ${used}`,
+  lastSummary = [`[스드메 견적 검사 결과] 기준: ${$("basisPeriod").textContent.startsWith("참가격")?"":"참가격 "}${$("basisPeriod").textContent}, ${used}`,
     verdictLine||"(기본가 미입력)",
     `견적서 추가금 ${man(paidSum)} + 안 적힌 추가금 예상 ${man(unkTyp)}`,
     `예상 총액 ${base?man(total):"-"}`,
@@ -613,10 +618,23 @@ async function copy(text){
 }
 $("copyQs").addEventListener("click",()=>copy(lastQs));
 $("copySum").addEventListener("click",()=>copy(lastSummary));
+$("applyBtn").addEventListener("click",()=>{
+  const sample = !$("sampleBar").hidden ? "\n(지금은 예시 숫자예요. 내 견적으로 바꿔서 보내 주세요)" : "";
+  const text = "무료 견적 검토 신청해요.\n\n" + lastSummary + sample;
+  try{ navigator.clipboard.writeText(text); }catch(e){}
+});
+// 결과를 본 수 세기: 결과 보기를 누르면 주소를 /result/로 바꿔 방문 통계에 따로 잡히게 한다 (처음 한 번만)
+let resultCounted=false;
+function countResult(){
+  if(resultCounted||!history.pushState) return; resultCounted=true;
+  try{ history.pushState({result:1},"","/result/"+location.hash); }catch(e){}
+}
+$("goResult").addEventListener("click",countResult);
+document.querySelector("#dock a").addEventListener("click",countResult);
 $("form").addEventListener("submit",e=>e.preventDefault());
 
 loadSample(); render();
 </script>
 
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "354298f8ef5e4e84ac72db4cfffef2d9"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "354298f8ef5e4e84ac72db4cfffef2d9", "spa": true}'></script><!-- End Cloudflare Web Analytics -->
 </body></html>
