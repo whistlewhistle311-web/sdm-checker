@@ -7,15 +7,25 @@
 <title>무료 검토 신청 | 스드메체크</title>
 <link rel="icon" href="/icon.png">
 <style>
-:root{--bg:#FAF4F7;--ink:#1E2032;--accent:#8C2B50}
-@media (prefers-color-scheme:dark){:root{--bg:#17141A;--ink:#F1ECF2;--accent:#E68DB1}}
+:root{--bg:#FAF4F7;--ink:#1E2032;--sub:#5B5D70;--accent:#8C2B50;--accent-ink:#FFFFFF;--soft:#F3E3EB}
+@media (prefers-color-scheme:dark){:root{--bg:#17141A;--ink:#F1ECF2;--sub:#B9B3BD;--accent:#E68DB1;--accent-ink:#17141A;--soft:#2A2230}}
 body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",sans-serif;word-break:keep-all;text-align:center;padding:16px;box-sizing:border-box}
-a{color:var(--accent);font-weight:700}
+main{max-width:420px;width:100%}
+h1{font-size:22px;line-height:1.4;margin:0 0 10px}
+p{line-height:1.6;margin:0 0 14px}
+.sub{color:var(--sub);font-size:14px}
+.go{display:flex;align-items:center;justify-content:center;min-height:56px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:18px;font-weight:800;text-decoration:none;margin:18px 0 10px}
+.alt{display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:999px;background:var(--soft);color:var(--ink);font-weight:700;text-decoration:none;margin:0 0 18px}
 </style>
 </head>
 <body>
-<p>결과를 복사했어요. 인스타그램 @sdm.check DM 창에 붙여넣어 주세요.<br>안 넘어가면 <a href="https://ig.me/m/sdm.check">여기를 눌러 주세요</a>.</p>
-<script>setTimeout(function(){location.replace("https://ig.me/m/sdm.check")},900)</script>
+<main>
+<h1>결과를 복사했어요</h1>
+<p>아래 버튼으로 인스타 DM 창을 열고, 입력칸을 길게 눌러 붙여넣은 뒤 보내 주세요.</p>
+<a class="go" href="https://ig.me/m/sdm.check">인스타 앱에서 DM 열기</a>
+<a class="alt" href="https://www.instagram.com/sdm.check/">안 열리면: @sdm.check 프로필 열기</a>
+<p class="sub">로그인 화면이 뜨면 인스타 앱을 직접 열고 sdm.check를 검색해서 메시지를 보내 주세요. 이름이나 연락처는 받지 않아요.</p>
+</main>
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "354298f8ef5e4e84ac72db4cfffef2d9"}'></script>
 </body>
 </html>
