@@ -59,10 +59,22 @@ button,input,select{font:inherit;color:inherit;letter-spacing:inherit}
 .logo{font-weight:800;font-size:21px;color:var(--accent);text-decoration:none;letter-spacing:-.03em}
 .pill-link{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:var(--pill);background:var(--soft);color:var(--ink);font-size:15px;font-weight:700;text-decoration:none}
 
-header.top{display:grid;gap:14px;padding:24px 8px 28px;max-width:40em}
-.lede{font-size:18px;line-height:1.6;color:var(--muted)}
-.basis{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted)}
+header.top{display:grid;gap:10px;padding:8px 8px 18px;max-width:40em}
+.lede{font-size:17px;line-height:1.55;color:var(--muted)}
+.basis{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--muted);padding:12px 8px 20px}
 .basis b{color:var(--ink);font-weight:700}
+
+/* 첫 화면 계산기: 지역·총액 두 칸 + 바로 나오는 결과 (시안 D, 2026-10-19 휘 선택: NerdWallet 계산기 배치 + Zillow식 한 줄 질문 제목) */
+.quick{max-width:640px;gap:18px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:10px}
+.two select,.two input[type=text]{font-size:17px;padding:0 14px}
+.two .won input{padding-right:38px}.two .won span{right:14px}
+.qempty{background:var(--bg);border-radius:var(--r-in);padding:16px 18px;color:var(--muted);font-size:15px}
+.qout{display:grid;gap:10px}
+.qbig{font-size:24px;font-weight:800;line-height:1.3;letter-spacing:-.04em}
+.qmore{font-weight:700;font-size:15px;text-decoration:none;padding:6px 0;justify-self:start}
+@media (prefers-reduced-motion:no-preference){.qout.rise{animation:rise .35s ease-out}@keyframes rise{from{transform:translateY(8px)}to{transform:none}}}
+@media (min-width:900px){.quick{max-width:none}.quick .qwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}}
 
 .grid{display:grid;gap:16px;grid-template-columns:1fr}
 @media (min-width:900px){.grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
@@ -70,9 +82,6 @@ header.top{display:grid;gap:14px;padding:24px 8px 28px;max-width:40em}
 
 .sheet{background:var(--paper);border-radius:var(--r-card);padding:24px 20px;display:grid;gap:22px;min-width:0}
 @media (min-width:600px){.sheet{padding:32px}}
-.sample{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--soft);border-radius:var(--r-in);padding:12px 12px 12px 18px;font-size:15px}
-.sample .btn{background:var(--paper);color:var(--accent)}
-.sample .btn:hover{background:var(--line)}
 .btn{min-height:44px;border:0;background:var(--soft);border-radius:var(--pill);padding:0 18px;cursor:pointer;font-size:15px;font-weight:700}
 .btn:hover{background:var(--band-mid)}
 .btn.primary{background:var(--accent);color:var(--accent-ink)}
@@ -200,35 +209,37 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 
 <div class="wrap">
   <nav class="bar" aria-label="상단">
-    <a class="logo" href="./">스드메체크</a>
-    <a class="pill-link" href="compare.html">대행사별 가격</a>
+    <a class="logo" href="/">스드메체크</a>
+    <a class="pill-link" href="/compare.html">대행사별 가격</a>
   </nav>
 
   <header class="top">
     <h1>받은 스드메 견적,<br><em>비싼 편일까요?</em></h1>
-    <p class="lede">지역과 총액을 넣으면 한국소비자원이 조사한 실제 계약 <b id="basisN"></b>건과 비교해 드려요. 견적서에 안 적힌 추가금도 더해서 보여 드려요.</p>
-    <div class="basis">
-      <span>출처 <b>한국소비자원 참가격</b></span>
-      <span>기준 <b id="basisPeriod"></b></span>
-      <span>선택품목 <b id="basisItems"></b>개 가격</span>
-      <span>회원가입 없음 · 무료</span>
-    </div>
+    <p class="lede">지역과 총액만 넣으면 실제 계약 <b id="basisN"></b>건 중 어디쯤인지 바로 보여 드려요.</p>
   </header>
+
+  <section class="sheet quick" aria-label="견적 넣기">
+    <div class="qwrap">
+      <div class="two">
+        <div class="field"><label for="region">지역</label><select id="region"><option value="">지역 고르기</option></select></div>
+        <div id="pkgBox" class="field">
+          <label for="pkg">스드메 총액</label>
+          <div class="won"><input type="text" inputmode="numeric" id="pkg" placeholder="숫자만 입력" aria-describedby="sepNote"><span>원</span></div>
+        </div>
+      </div>
+      <p class="hint" id="sepNote" hidden>따로따로 계약 금액은 아래 '자세히 보기'에 넣어 주세요.</p>
+      <div id="qOut" aria-live="polite"></div>
+    </div>
+  </section>
+  <div class="basis">
+    <span>출처 <b>한국소비자원 참가격</b></span>
+    <span>기준 <b id="basisPeriod"></b></span>
+    <span>선택품목 <b id="basisItems"></b>개 가격</span>
+    <span>입력한 값은 저장 안 해요 · 회원가입 없음</span>
+  </div>
 
   <div class="grid">
     <form class="sheet" id="form" autocomplete="off">
-      <div class="sample" id="sampleBar">
-        <span>지금 보이는 숫자는 <b>예시 견적</b>이에요.</span>
-        <button type="button" class="btn" id="clearBtn">비우고 내 견적 넣기</button>
-      </div>
-
-      <div class="field"><label for="region">지역</label><select id="region"></select></div>
-
-      <div id="pkgBox" class="field">
-        <label for="pkg">스드메 총액 (기본가)</label>
-        <div class="won"><input type="text" inputmode="numeric" id="pkg" placeholder="예: 3,500,000"><span>원</span></div>
-      </div>
-
       <fieldset>
         <legend>견적서에 따로 붙은 항목</legend>
         <div class="chips" id="quick">
@@ -241,7 +252,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
         <p class="hint" style="margin-top:10px">고른 항목은 보통 금액으로 더해요. 정확한 금액은 아래 자세히 입력에서 고칠 수 있어요.</p>
       </fieldset>
 
-      <button type="button" class="btn primary big" id="goResult">결과 보기</button>
+      <button type="button" class="btn primary big" id="goResult">추가금까지 더한 결과 보기</button>
 
       <details class="detail" id="detailBox">
         <summary>항목 <span id="allCount"></span>개 전부 넣어서 자세히 보기</summary>
@@ -309,7 +320,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
     <details><summary>입력한 견적은 저장되나요?</summary><p>아니요. 입력한 내용은 이 화면 안에서만 계산하고 어디에도 저장하거나 보내지 않아요. 회원가입도 없어요.</p></details>
     <details><summary>비교하는 숫자는 어디서 온 건가요?</summary><p>한국소비자원 참가격의 결혼서비스 가격정보(2026년 8월 조사분)를 정리했어요. 스드메 패키지는 소비자원이 업체를 조사해 모은 실제 계약금액의 분포와 비교해요.</p></details>
     <details><summary>전체 시장 평균 가격인가요?</summary><p>아니요. 소비자원이 조사한 업체들의 계약금액이라 전체 시장을 대표하는 값은 아니에요. 성수기, 요일, 시간대에 따라 실제 금액은 달라질 수 있어요.</p></details>
-    <details><summary>업체 이름도 알려 주나요?</summary><p>검사기에서는 업체 이름을 다루지 않아요. 같은 업체를 대행사마다 얼마로 공개했는지는 <a href="compare.html">대행사별 가격</a> 페이지에서 원문 그대로 볼 수 있어요.</p></details>
+    <details><summary>업체 이름도 알려 주나요?</summary><p>검사기에서는 업체 이름을 다루지 않아요. 같은 업체를 대행사마다 얼마로 공개했는지는 <a href="/compare.html">대행사별 가격</a> 페이지에서 원문 그대로 볼 수 있어요.</p></details>
     <details><summary>따로 붙은 항목은 무엇을 고르면 되나요?</summary><p>견적서에 기본가와 별도로 금액이 적힌 항목을 고르면 돼요. 원본 데이터, 헬퍼비, 드레스 피팅비, 얼리스타트가 자주 따로 붙어요. 잘 모르겠으면 '잘 모르겠어요'를 누르면 보통 금액으로 더해서 보여 드려요.</p></details>
     <details><summary>원본 데이터, 피팅비, 얼리스타트는 원래 기본 포함인가요?</summary><p>공정거래위원회 결혼준비대행업 표준약관(2025년 4월 제정)은 사진파일 구입비, 드레스 피팅비, 메이크업 얼리스타트비를 기본서비스에 넣도록 권고해요. 강제는 아니어서 업체에 기본가 포함을 요청할 때 근거로 말할 수 있어요.</p></details>
     <details><summary>업체는 가격을 꼭 공개해야 하나요?</summary><p>네. 2025년 11월 12일부터 결혼서비스 사업자는 기본서비스와 선택품목 요금, 위약금과 환급 기준을 자기 홈페이지나 한국소비자원 참가격에 공개해야 해요. 2026년 8월부터 공정위가 집중 점검하고 있어요.</p></details>
@@ -362,7 +373,6 @@ const CORE = [
 const FALLBACK = {"서울(강남외)":"수도권","경상도":"비수도권","제주도":"비수도권"};
 const MIN_N = 30;
 const CAT = {studio:"스튜디오",dress:"드레스",makeup:"메이크업",common:"예식장 쪽 (참고)"};
-const SAMPLE = {region:"서울(강남)",pkg:4200000,quick:["raw","helper"]};
 // 첫 화면 칩 → 자세히 입력의 항목 상태. 누름 = 따로(보통 금액), 안 누름 = 포함(얼리스타트는 안 함), 잘 모르겠어요 = 모름
 const QUICK = {raw:["raw_data"],helper:["helper_shoot","helper_wedding"],fitting:["fitting_fee"],early:["early_start"]};
 
@@ -451,7 +461,7 @@ chipEls.forEach(b=>b.addEventListener("click",()=>{
 $("goResult").addEventListener("click",()=>{ render(); $("result").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"}); });
 $("region").addEventListener("change",render);
 document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener("change",()=>{
-  const sep = $("modeSep").checked; $("pkgBox").hidden=sep; $("sepBox").hidden=!sep; render();
+  const sep = $("modeSep").checked; $("pkgBox").hidden=sep; $("sepBox").hidden=!sep; $("sepNote").hidden=!sep; render();
 }));
 
 // 규칙
@@ -475,7 +485,7 @@ function readState(){
     const id=el.dataset.id, st=el.querySelector('input[type=radio]:checked').value;
     const q=Math.max(1,num(el.querySelector(`#qty_${id}`).value)||1); const amt=num(el.querySelector(".amt .won input").value); return {a:A[id], st, amt, qty:q, unit:Math.round(amt/q)};
   });
-  return {region:$("region").value, sep:$("modeSep").checked, pkg:num($("pkg").value),
+  return {region:$("region").value||"전국", picked:!!$("region").value, sep:$("modeSep").checked, pkg:num($("pkg").value),
     studio:num($("studio").value), dress:num($("dress").value), makeup:num($("makeup").value), items};
 }
 function refRegion(name){
@@ -499,9 +509,9 @@ function scaleSVG(v, r){
     <line x1="${x(r.package_p10)}" x2="${x(p90)}" y1="46" y2="46" stroke="var(--band-mid)" stroke-width="2"/>
     <rect x="${x(r.package_p25)}" y="34" width="${Math.max(2,x(r.package_p75)-x(r.package_p25))}" height="24" rx="4" fill="var(--band)" stroke="var(--band-mid)"/>
     <line x1="${x(r.package_median)}" x2="${x(r.package_median)}" y1="30" y2="62" stroke="var(--ink)" stroke-width="2"/>
-    <text x="${x(r.package_p10)}" y="80" text-anchor="middle">하위10% ${man(r.package_p10)}</text>
+    <text x="${Math.max(x(r.package_p10),46)}" y="80" text-anchor="middle">하위10% ${man(r.package_p10)}</text>
     <text x="${x(r.package_median)}" y="80" text-anchor="middle">중간 ${man(r.package_median)}</text>
-    <text x="${x(p90)}" y="80" text-anchor="middle">상위10% ${man(p90)}</text>
+    <text x="${Math.min(x(p90),W-46)}" y="80" text-anchor="middle">상위10% ${man(p90)}</text>
     <path class="you" d="M ${x(v)} 30 l -7 -10 h 14 z"/>
     <text class="youlbl" x="${Math.min(Math.max(x(v),40),W-40)}" y="14" text-anchor="middle">내 견적 ${man(v)}</text>
   </svg>`;
@@ -537,6 +547,7 @@ function render(){
     verdictLine = parts.map(([n,v,m])=>`${n} ${man(v)}(중간 ${man(m)})`).join(", ");
   }
   $("verdict").innerHTML=vHTML; $("scaleBox").innerHTML=scale;
+  renderQuick(s,r,used,note);
 
   // 2. 총액
   const paid = s.items.filter(i=>i.st==="paid" && i.amt);
@@ -587,29 +598,48 @@ function render(){
     `예상 총액 ${base?man(total):"-"}`,
     ...flags.filter(f=>f[0]!=="ok").slice(0,5).map(f=>"· "+f[1]),
     "출처: 한국소비자원 참가격 (업체 자료 갱신·성수기 등에 따라 실제 금액은 다를 수 있음)"].join("\n");
+  // 결과가 나온 채로 1초 동안 입력이 멈추면 '결과 봄'으로 한 번 센다 (치는 중인 숫자는 세지 않음)
+  clearTimeout(countTimer);
+  if(base>=QMIN) countTimer=setTimeout(countResult,1000);
 }
 
-// ---------- 예시 / 비우기 ----------
+// ---------- 첫 화면 바로 결과 ----------
+const QMIN = 500000;
+let countTimer=null, qShown=false;
+function renderQuick(s,r,used,note){
+  const box=$("qOut");
+  if(s.sep){ box.innerHTML=""; qShown=false; return; }
+  const v=s.pkg;
+  if(!v || v<QMIN){
+    qShown=false;
+    box.innerHTML = `<p class="qempty">${v?"금액을 원 단위로 끝까지 넣어 주세요. 예: 350만원이면 3500000":"총액을 넣으면 여기에 바로 결과가 나와요."}</p>`;
+    return;
+  }
+  const [cls,label,desc]=position(v,r);
+  const diff=Math.round((v/r.package_median-1)*100);
+  const col = cls==="mid"?"ink":cls;
+  const line = diff===0 ? `${used} 딱 중간값이에요` : `${used} 중간값보다 <span style="color:var(--${col})">${Math.abs(diff)}% ${diff>0?"비싸요":"저렴해요"}</span>`;
+  const pick = s.picked ? "" : `<p class="note">지역을 고르면 그 지역 계약과 비교해요. 지금은 전국 기준이에요.</p>`;
+  box.innerHTML = `<div class="qout${qShown?"":" rise"}">
+    <span class="chip ${cls}">${label}</span>
+    <p class="qbig">${line}</p>
+    <p class="note">${used} 계약 ${comma(r.package_n)}건 중 ${desc}. 중간값 ${man(r.package_median)}, 가운데 50%는 ${man(r.package_p25)}~${man(r.package_p75)}.</p>
+    ${note?`<p class="warnbox">${note}</p>`:""}${pick}
+    ${scaleSVG(v,r)}
+    <a class="btn primary big" data-apply href="/apply/" target="_blank" rel="noopener">이 결과로 무료 검토 받기</a>
+    <p class="note" style="text-align:center">10월 31일까지 무료 · 이름이나 연락처는 받지 않아요</p>
+    <a class="qmore" href="#form">따로 붙은 항목까지 넣고 예상 총액 보기 ↓</a>
+  </div>`;
+  qShown=true;
+}
+
+// ---------- 항목 상태 바꾸기 ----------
 function setItem(id,st,amt,q){
   const el=document.querySelector(`.item[data-id="${id}"]`); if(!el) return;
   el.querySelector(`input[value="${st}"]`).checked=true;
   el.querySelector(".amt").hidden = st!=="paid";
   el.querySelector(".amt .won input").value = amt?comma(amt):""; el.querySelector(`#qty_${id}`).value = String(q||1);
 }
-function loadSample(){
-  $("region").value=SAMPLE.region; $("modePkg").checked=true; $("pkgBox").hidden=false; $("sepBox").hidden=true;
-  $("pkg").value=comma(SAMPLE.pkg);
-  chipEls.forEach(b=>setPressed(b.dataset.q, SAMPLE.quick.includes(b.dataset.q)));
-  applyQuick();
-}
-$("clearBtn").addEventListener("click",()=>{
-  ["pkg","studio","dress","makeup"].forEach(id=>$(id).value="");
-  CORE.forEach(([id,def])=>setItem(id,def));
-  rest.forEach(a=>setItem(a.id,"none"));
-  chipEls.forEach(b=>setPressed(b.dataset.q, b.dataset.q==="unsure")); applyQuick();
-  $("sampleBar").hidden=true; render(); $("pkg").focus();
-});
-
 // ---------- 복사 ----------
 async function copy(text){
   $("fallback").hidden=true;
@@ -618,12 +648,12 @@ async function copy(text){
 }
 $("copyQs").addEventListener("click",()=>copy(lastQs));
 $("copySum").addEventListener("click",()=>copy(lastSummary));
-$("applyBtn").addEventListener("click",()=>{
-  const sample = !$("sampleBar").hidden ? "\n(지금은 예시 숫자예요. 내 견적으로 바꿔서 보내 주세요)" : "";
-  const text = "무료 견적 검토 신청해요.\n\n" + lastSummary + sample;
-  try{ navigator.clipboard.writeText(text); }catch(e){}
+// 무료 검토 버튼(첫 화면·결과 화면): 누르면 결과를 복사해 두고 /apply/ 로 간다
+document.addEventListener("click",e=>{
+  if(!e.target.closest("#applyBtn,[data-apply]")) return;
+  try{ navigator.clipboard.writeText("무료 견적 검토 신청해요.\n\n" + lastSummary); }catch(err){}
 });
-// 결과를 본 수 세기: 결과 보기를 누르면 주소를 /result/로 바꿔 방문 통계에 따로 잡히게 한다 (처음 한 번만)
+// 결과를 본 수 세기: 결과가 처음 나오면 주소를 /result/로 바꿔 방문 통계에 따로 잡히게 한다 (처음 한 번만)
 let resultCounted=false;
 function countResult(){
   if(resultCounted||!history.pushState) return; resultCounted=true;
@@ -633,7 +663,8 @@ $("goResult").addEventListener("click",countResult);
 document.querySelector("#dock a").addEventListener("click",countResult);
 $("form").addEventListener("submit",e=>e.preventDefault());
 
-loadSample(); render();
+// 처음엔 비어 있는 상태로 시작: 따로 붙은 항목은 '잘 모르겠어요'(보통 금액으로 더함)
+setPressed("unsure",true); applyQuick(); render();
 </script>
 
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "354298f8ef5e4e84ac72db4cfffef2d9", "spa": true}'></script><!-- End Cloudflare Web Analytics -->
