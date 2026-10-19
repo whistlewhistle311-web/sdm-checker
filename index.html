@@ -623,7 +623,7 @@ function renderQuick(s,r,used,note){
   box.innerHTML = `<div class="qout${qShown?"":" rise"}">
     <span class="chip ${cls}">${label}</span>
     <p class="qbig">${line}</p>
-    <p class="note">${used} 계약 ${comma(r.package_n)}건 중 ${desc}. 중간값 ${man(r.package_median)}, 가운데 50%는 ${man(r.package_p25)}~${man(r.package_p75)}.</p>
+    <p class="note">${used} 계약 ${comma(r.package_n)}건 기준, ${desc}. 중간값 ${man(r.package_median)}, 가운데 50%는 ${man(r.package_p25)}~${man(r.package_p75)}.</p>
     ${note?`<p class="warnbox">${note}</p>`:""}${pick}
     ${scaleSVG(v,r)}
     <a class="btn primary big" data-apply href="/apply/" target="_blank" rel="noopener">이 결과로 무료 검토 받기</a>
