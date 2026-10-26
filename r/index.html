@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>검토 결과 | 스드메체크</title>
+<link rel="icon" href="/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
+<style>
+/* 스드메체크 검토 결과 페이지. 색·모양은 검사기(index.html)와 같은 토큰. 번호표·단계 표시는 시안 C(인터넷우체국 배송조회식). */
+:root{
+  --bg:#FAF4F7; --paper:#FFFFFF; --soft:#F5E3EC; --ink:#1E2032; --muted:#66647A; --line:#F0DCE6;
+  --accent:#8C2B50; --accent-ink:#FFFFFF; --accent-hover:#621A38; --band-mid:#E8C8D6;
+  --ok:#2C7A53; --ok-soft:#E5F3EB; --warn:#9A5E06; --warn-soft:#FBF0DD;
+  --f-body:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17141A; --paper:#211C24; --soft:#2C2430; --ink:#F1ECF2; --muted:#B3A9B8; --line:#3A3040;
+  --accent:#E68DB1; --accent-ink:#1A0F15; --accent-hover:#F0A7C6; --band-mid:#4A3C50;
+  --ok:#72CC9C; --ok-soft:#1C3027; --warn:#E9B556; --warn-soft:#352915; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17141A; --paper:#211C24; --soft:#2C2430; --ink:#F1ECF2; --muted:#B3A9B8; --line:#3A3040;
+  --accent:#E68DB1; --accent-ink:#1A0F15; --accent-hover:#F0A7C6; --band-mid:#4A3C50;
+  --ok:#72CC9C; --ok-soft:#1C3027; --warn:#E9B556; --warn-soft:#352915; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;letter-spacing:-.01em;word-break:keep-all;overflow-wrap:break-word;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px 64px}
+.bar{display:flex;justify-content:space-between;align-items:center;height:72px}
+.logo{font-weight:800;font-size:21px;color:var(--accent);text-decoration:none}
+.card{background:var(--paper);border-radius:32px;padding:24px 20px;display:grid;gap:16px;margin-top:8px}
+h1{margin:0;font-size:24px;font-weight:800;line-height:1.3}
+h2{margin:0;font-size:17px;font-weight:800}
+p{margin:0}
+.no{font-size:13px;color:var(--muted)}
+.code{font-size:34px;font-weight:800;letter-spacing:.08em;color:var(--accent);line-height:1.1;margin-top:-10px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);position:relative}
+.steps::before{content:"";position:absolute;left:16%;right:16%;top:15px;height:2px;background:var(--band-mid)}
+.st{display:grid;justify-items:center;gap:6px;font-size:13px;color:var(--muted);position:relative}
+.st i{width:32px;height:32px;border-radius:50%;background:var(--paper);border:2px solid var(--band-mid);display:grid;place-items:center;font-style:normal;font-weight:800;font-size:13px}
+.st.on{color:var(--ink);font-weight:700}
+.st.on i{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.muted{color:var(--muted);font-size:14.5px}
+.box{background:var(--bg);border-radius:20px;padding:14px 16px;display:grid;gap:4px}
+.box b{font-weight:700}
+.box span{color:var(--muted);font-size:14.5px}
+ol{margin:0;padding-left:20px;display:grid;gap:6px}
+.btn{display:flex;align-items:center;justify-content:center;min-height:52px;border:0;border-radius:999px;background:var(--accent);color:var(--accent-ink);font:inherit;font-weight:800;text-decoration:none;cursor:pointer}
+.btn:hover{background:var(--accent-hover)}
+.btn.ghost{background:var(--soft);color:var(--ink)}
+.in{width:100%;border:2px solid transparent;background:var(--bg);border-radius:20px;min-height:56px;padding:0 18px;font:inherit;font-size:22px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.in:focus{border-color:var(--accent);outline:none}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.foot{margin-top:24px;font-size:13px;color:var(--muted);display:grid;gap:6px}
+.foot a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="bar"><a class="logo" href="/">스드메체크</a></nav>
+
+  <form class="card" id="ask" hidden>
+    <h1>검토 번호로 결과 보기</h1>
+    <label class="muted" for="codeIn">신청할 때 받은 6자리 번호를 넣어 주세요.</label>
+    <input class="in" id="codeIn" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false">
+    <button class="btn" type="submit">결과 보기</button>
+  </form>
+
+  <section class="card" id="view" hidden aria-live="polite">
+    <p class="no">검토 번호</p>
+    <p class="code" id="code"></p>
+    <div class="steps" id="steps" aria-label="진행 단계">
+      <div class="st on"><i>1</i>접수</div><div class="st" id="s2"><i>2</i>검토 중</div><div class="st" id="s3"><i>3</i>답장 완료</div>
+    </div>
+    <div id="waiting" hidden>
+      <h1>검토하고 있어요</h1>
+      <p class="muted" style="margin-top:8px">보통 하루 안에 이 주소에 검토 결과가 올라와요. 이 주소를 저장해 두고 나중에 다시 열어 주세요.</p>
+    </div>
+    <div id="done" hidden style="display:grid;gap:16px">
+      <div><h1 id="headline"></h1><p class="muted" id="meta" style="margin-top:6px"></p></div>
+      <div id="points" style="display:grid;gap:8px"></div>
+      <div id="qsWrap" hidden><h2 style="margin-bottom:8px">계약 전에 물어볼 것</h2><ol id="qs"></ol></div>
+      <p class="muted" id="closing"></p>
+    </div>
+    <p class="muted" id="err" hidden>결과를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>
+    <a class="btn ghost" href="/">검사기로 돌아가기</a>
+  </section>
+
+  <div class="foot">
+    <p>검토는 한국소비자원 참가격 가격 자료와 공정위 표준약관을 기준으로 한 참고 의견이에요. 법률 자문이 아니고, 실제 계약은 계약서 조항이 먼저 적용될 수 있어요.</p>
+    <p>이 페이지는 번호를 아는 사람만 열 수 있고 검색에 나오지 않아요. 지역·항목·금액만 쓰고 이름·연락처·업체 이름은 쓰지 않아요. 지워 달라고 하시려면 인스타그램 <a href="https://www.instagram.com/sdm.check/" rel="noopener">@sdm.check</a>로 번호를 알려 주세요.</p>
+  </div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const OK=/^[23456789A-HJ-NP-Z]{6}$/;
+const code=(new URLSearchParams(location.search).get("n")||"").toUpperCase().trim();
+function el(tag,text,cls){const e=document.createElement(tag); if(cls) e.className=cls; e.textContent=text; return e;}
+async function show(c){
+  $("view").hidden=false; $("code").textContent=c;
+  try{
+    const r=await fetch(`/r/d/${c}.json`,{cache:"no-store"});
+    if(r.status===404){ $("s2").classList.add("on"); $("waiting").hidden=false; $("steps").setAttribute("aria-label","진행 단계: 검토 중"); return; }
+    if(!r.ok) throw 0;
+    const d=await r.json();
+    ["s2","s3"].forEach(i=>$(i).classList.add("on")); $("steps").setAttribute("aria-label","진행 단계: 답장 완료");
+    $("done").hidden=false;
+    $("headline").textContent=d.headline||"검토 결과";
+    $("meta").textContent=[d.region,d.base,d.date?d.date+" 검토":""].filter(Boolean).join(" · ");
+    (d.points||[]).forEach(p=>{const b=document.createElement("div");b.className="box";b.append(el("b",p.t));if(p.d)b.append(el("span",p.d));$("points").append(b);});
+    if((d.questions||[]).length){ $("qsWrap").hidden=false; d.questions.forEach(q=>$("qs").append(el("li",q))); }
+    $("closing").textContent=d.closing||"";
+  }catch(e){ $("err").hidden=false; }
+}
+if(OK.test(code)) show(code);
+else{ $("ask").hidden=false; $("ask").addEventListener("submit",e=>{e.preventDefault(); const v=$("codeIn").value.toUpperCase().trim(); if(OK.test(v)) location.search="?n="+v; else $("codeIn").focus();}); }
+</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "354298f8ef5e4e84ac72db4cfffef2d9"}'></script>
+</body>
+</html>

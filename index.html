@@ -132,6 +132,22 @@ details.more>summary{cursor:pointer;color:var(--accent);font-weight:700;font-siz
 details.more>summary::-webkit-details-marker{display:none}
 .cat{font-size:13px;color:var(--muted);font-weight:700;margin-top:16px}
 
+/* 무료 검토 번호표 (시안 C, 2026-10-26 휘 선택: 인터넷우체국 배송조회식 번호 + 단계 표시) */
+.ticket{background:var(--bg);border-radius:var(--r-in);padding:20px 18px;display:grid;gap:12px;margin-top:4px}
+.ticket .no{font-size:13px;color:var(--muted)}
+.ticket .code{font-size:34px;font-weight:800;letter-spacing:.08em;color:var(--accent);line-height:1.1;margin-top:-6px}
+.turl{background:var(--paper);border-radius:14px;padding:10px 12px;font-size:15px;font-weight:700;word-break:break-all}
+.tsteps{display:grid;grid-template-columns:repeat(3,1fr);position:relative}
+.tsteps::before{content:"";position:absolute;left:16%;right:16%;top:15px;height:2px;background:var(--band-mid)}
+.tst{display:grid;justify-items:center;gap:6px;font-size:13px;color:var(--muted);position:relative}
+.tst i{width:32px;height:32px;border-radius:50%;background:var(--paper);border:2px solid var(--band-mid);display:grid;place-items:center;font-style:normal;font-weight:800;font-size:13px}
+.tst.on{color:var(--ink);font-weight:700}
+.tst.on i{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tbtns .btn{min-height:48px;font-size:14.5px;padding:0 10px}
+.terr{font-size:14px;background:var(--warn-soft);color:var(--warn);padding:10px 14px;border-radius:16px}
+@media (prefers-reduced-motion:no-preference){.ticket{animation:rise .3s ease-out}}
+
 /* 판정서 */
 .result .verdict{display:grid;gap:8px}
 .kicker{font-size:15px;font-weight:700;color:var(--muted)}
@@ -194,7 +210,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-{"@type":"Question","name":"입력한 견적은 저장되나요?","acceptedAnswer":{"@type":"Answer","text":"아니요. 입력한 내용은 이 화면 안에서만 계산하고 어디에도 저장하거나 보내지 않아요. 회원가입도 없어요."}},
+{"@type":"Question","name":"입력한 견적은 저장되나요?","acceptedAnswer":{"@type":"Answer","text":"아니요. 입력한 내용은 이 화면 안에서만 계산해요. 무료 검토를 신청할 때만 결과 요약(지역·금액·항목)과 검토 번호를 보내요. 이름·연락처는 받지 않고 회원가입도 없어요."}},
 {"@type":"Question","name":"비교하는 숫자는 어디서 온 건가요?","acceptedAnswer":{"@type":"Answer","text":"한국소비자원 참가격의 결혼서비스 가격정보(2026년 8월 조사분)를 정리했어요. 스드메 패키지는 소비자원이 업체를 조사해 모은 실제 계약금액의 분포와 비교해요."}},
 {"@type":"Question","name":"전체 시장 평균 가격인가요?","acceptedAnswer":{"@type":"Answer","text":"아니요. 소비자원이 조사한 업체들의 계약금액이라 전체 시장을 대표하는 값은 아니에요. 성수기, 요일, 시간대에 따라 실제 금액은 달라질 수 있어요."}},
 {"@type":"Question","name":"업체 이름도 알려 주나요?","acceptedAnswer":{"@type":"Answer","text":"검사기에서는 업체 이름을 다루지 않아요. 같은 업체를 대행사마다 얼마로 공개했는지는 대행사별 가격 페이지에서 원문 그대로 볼 수 있어요."}},
@@ -202,7 +218,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 {"@type":"Question","name":"원본 데이터, 피팅비, 얼리스타트는 원래 기본 포함인가요?","acceptedAnswer":{"@type":"Answer","text":"공정거래위원회 결혼준비대행업 표준약관(2025년 4월 제정)은 사진파일 구입비, 드레스 피팅비, 메이크업 얼리스타트비를 기본서비스에 넣도록 권고해요. 강제는 아니어서 업체에 기본가 포함을 요청할 때 근거로 말할 수 있어요."}},
 {"@type":"Question","name":"업체는 가격을 꼭 공개해야 하나요?","acceptedAnswer":{"@type":"Answer","text":"네. 2025년 11월 12일부터 결혼서비스 사업자는 기본서비스와 선택품목 요금, 위약금과 환급 기준을 자기 홈페이지나 한국소비자원 참가격에 공개해야 해요. 2026년 8월부터 공정위가 집중 점검하고 있어요."}},
 {"@type":"Question","name":"계약을 취소하면 위약금은 얼마인가요?","acceptedAnswer":{"@type":"Answer","text":"소비자분쟁해결기준으로는 대행 개시 전이면 총 대행요금의 10%를 빼고 돌려받아요. 계약서에 다른 조항이 있으면 그게 먼저 적용될 수 있으니 서명 전에 위약금 조항을 확인하세요."}},
-{"@type":"Question","name":"무료 견적 검토는 어떻게 신청하나요?","acceptedAnswer":{"@type":"Answer","text":"인스타그램 @sdm.check DM으로 지역, 총액, 따로 붙은 항목을 보내 주시면 돼요. 견적서 사진은 없어도 괜찮고, 이름이나 연락처는 받지 않아요."}},
+{"@type":"Question","name":"무료 견적 검토는 어떻게 신청하나요?","acceptedAnswer":{"@type":"Answer","text":"지역과 총액을 넣고 결과 아래 연락처 없이 무료 검토 신청을 누르면 돼요. 검토 번호와 주소가 나오고, 하루 안에 그 주소에 검토 결과가 올라와요. 이름·전화번호·이메일은 받지 않아요."}},
 {"@type":"Question","name":"숫자가 틀린 것 같으면 어떻게 하나요?","acceptedAnswer":{"@type":"Answer","text":"인스타그램 @sdm.check DM으로 어느 부분인지 알려 주세요. 원자료와 대조해서 고치고, 고친 내용과 날짜를 페이지에 적어 둘게요."}}
 ]}
 </script>
@@ -296,8 +312,8 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
         <ol class="qs" id="qs"></ol>
       </div>
       <div class="apply-here">
-        <a class="btn primary big" id="applyBtn" href="/apply/" target="_blank" rel="noopener">이 결과로 무료 검토 받기</a>
-        <p class="note" style="margin-top:8px">누르면 이 결과가 복사돼요. 다음 화면에서 인스타 DM을 열고 붙여넣기만 하면 신청 끝이에요. 이름이나 연락처는 받지 않아요.</p>
+        <button type="button" class="btn primary big" id="applyBtn" data-apply>연락처 없이 무료 검토 신청</button>
+        <p class="note" style="margin-top:8px">누르면 검토 번호가 나와요. 하루 안에 그 번호의 주소에 검토 결과가 올라와요. 이름·전화번호·이메일은 받지 않아요.</p>
       </div>
       <div class="actions">
         <button type="button" class="btn" id="copyQs">질문 복사</button>
@@ -310,14 +326,14 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 
   <section class="apply" aria-labelledby="applyH">
     <h2 id="applyH">무료 견적 검토<br><span>10월 31일까지 무료</span></h2>
-    <p>지역, 총액, 따로 붙은 항목만 인스타그램 DM으로 보내 주시면 돼요. 견적서 사진은 없어도 괜찮아요.</p>
-    <a class="go" href="/dm/" target="_blank" rel="noopener">인스타 DM 보내기</a>
-    <p class="small">이름이나 연락처는 받지 않아요. 사진을 보내실 때는 이름·연락처·계약번호를 가려 주세요.</p>
+    <p>위에서 지역과 총액을 넣고 '연락처 없이 무료 검토 신청'을 누르면 끝이에요. 검토 번호가 나오고, 하루 안에 그 번호의 주소에 검토 결과가 올라와요.</p>
+    <a class="go" href="#pkg" id="applyJump">총액 넣고 신청하기</a>
+    <p class="small">이름·전화번호·이메일은 받지 않아요. 견적서 사진을 같이 보여 주고 싶으면 인스타그램 <a href="/dm/" target="_blank" rel="noopener" style="color:inherit">@sdm.check</a> DM도 돼요(이름·연락처·계약번호는 가려 주세요).</p>
   </section>
 
   <section class="faq" aria-labelledby="faqH">
     <h2 id="faqH">자주 묻는 질문</h2>
-    <details><summary>입력한 견적은 저장되나요?</summary><p>아니요. 입력한 내용은 이 화면 안에서만 계산하고 어디에도 저장하거나 보내지 않아요. 회원가입도 없어요.</p></details>
+    <details><summary>입력한 견적은 저장되나요?</summary><p>아니요. 입력한 내용은 이 화면 안에서만 계산해요. 무료 검토를 신청할 때만 결과 요약(지역·금액·항목)과 검토 번호를 보내요. 이름·연락처는 받지 않고 회원가입도 없어요.</p></details>
     <details><summary>비교하는 숫자는 어디서 온 건가요?</summary><p>한국소비자원 참가격의 결혼서비스 가격정보(2026년 8월 조사분)를 정리했어요. 스드메 패키지는 소비자원이 업체를 조사해 모은 실제 계약금액의 분포와 비교해요.</p></details>
     <details><summary>전체 시장 평균 가격인가요?</summary><p>아니요. 소비자원이 조사한 업체들의 계약금액이라 전체 시장을 대표하는 값은 아니에요. 성수기, 요일, 시간대에 따라 실제 금액은 달라질 수 있어요.</p></details>
     <details><summary>업체 이름도 알려 주나요?</summary><p>검사기에서는 업체 이름을 다루지 않아요. 같은 업체를 대행사마다 얼마로 공개했는지는 <a href="/compare.html">대행사별 가격</a> 페이지에서 원문 그대로 볼 수 있어요.</p></details>
@@ -325,7 +341,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
     <details><summary>원본 데이터, 피팅비, 얼리스타트는 원래 기본 포함인가요?</summary><p>공정거래위원회 결혼준비대행업 표준약관(2025년 4월 제정)은 사진파일 구입비, 드레스 피팅비, 메이크업 얼리스타트비를 기본서비스에 넣도록 권고해요. 강제는 아니어서 업체에 기본가 포함을 요청할 때 근거로 말할 수 있어요.</p></details>
     <details><summary>업체는 가격을 꼭 공개해야 하나요?</summary><p>네. 2025년 11월 12일부터 결혼서비스 사업자는 기본서비스와 선택품목 요금, 위약금과 환급 기준을 자기 홈페이지나 한국소비자원 참가격에 공개해야 해요. 2026년 8월부터 공정위가 집중 점검하고 있어요.</p></details>
     <details><summary>계약을 취소하면 위약금은 얼마인가요?</summary><p>소비자분쟁해결기준으로는 대행 개시 전이면 총 대행요금의 10%를 빼고 돌려받아요. 계약서에 다른 조항이 있으면 그게 먼저 적용될 수 있으니 서명 전에 위약금 조항을 확인하세요. 자세한 기준은 아래 '환불·위약금'에 정리해 뒀어요.</p></details>
-    <details><summary>무료 견적 검토는 어떻게 신청하나요?</summary><p>인스타그램 <a href="/dm/" target="_blank" rel="noopener">@sdm.check</a> DM으로 지역, 총액, 따로 붙은 항목을 보내 주시면 돼요. 견적서 사진은 없어도 괜찮고, 이름이나 연락처는 받지 않아요.</p></details>
+    <details><summary>무료 견적 검토는 어떻게 신청하나요?</summary><p>지역과 총액을 넣고 결과 아래 '연락처 없이 무료 검토 신청'을 누르면 돼요. 검토 번호와 주소가 나오고, 하루 안에 그 주소에 검토 결과가 올라와요. 이름·전화번호·이메일은 받지 않아요.</p></details>
     <details><summary>숫자가 틀린 것 같으면 어떻게 하나요?</summary><p>인스타그램 @sdm.check DM으로 어느 부분인지 알려 주세요. 원자료와 대조해서 고치고, 고친 내용과 날짜를 페이지에 적어 둘게요.</p></details>
   </section>
 
@@ -349,7 +365,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
     </section>
     <section class="foot-sec" aria-labelledby="fPriv">
       <h2 id="fPriv">개인정보</h2>
-      <p>입력한 견적은 이 화면 안에서만 계산하고 어디에도 저장·전송하지 않아요. 회원가입과 쿠키는 쓰지 않아요. 방문 수를 세려고 Cloudflare 웹 분석을 쓰는데, 쿠키 없이 페이지 열람 수만 세고 개인을 구분하지 않아요. 글꼴 파일만 구글 폰트에서 불러오며, 이때 구글에 접속 정보(IP 등)가 전달될 수 있어요. '복사' 버튼은 내 기기 클립보드에만 넣어요. 무료 견적 검토를 신청해 DM으로 보낸 견적서 사진은 검토에만 쓰고 저장하지 않아요. 검토 기록에는 지역·항목·금액만 남기고, 가려지지 않은 개인정보는 옮겨 적지 않아요.</p>
+      <p>입력한 견적은 이 화면 안에서만 계산하고 저장하지 않아요. 무료 검토를 신청하면 그때만 결과 요약(지역·금액·따로 붙은 항목)과 검토 번호를 구글 설문지로 보내요. 이름·전화번호·이메일은 받지 않아요. 검토 결과는 검토 번호 주소(sdmcheck.kr/r/)에 올리는데, 번호를 아는 사람만 열 수 있고 검색에 안 나오게 해 두며 지역·항목·금액만 쓰고 업체 이름은 쓰지 않아요. 회원가입과 쿠키는 쓰지 않아요. 방문 수를 세려고 Cloudflare 웹 분석을 쓰는데, 쿠키 없이 페이지 열람 수만 세고 개인을 구분하지 않아요. 글꼴 파일만 구글 폰트에서 불러오며, 이때 구글에 접속 정보(IP 등)가 전달될 수 있어요. '복사' 버튼은 내 기기 클립보드에만 넣어요. 인스타 DM으로 보낸 견적서 사진은 검토에만 쓰고 저장하지 않아요. 검토 기록에는 지역·항목·금액만 남기고, 가려지지 않은 개인정보는 옮겨 적지 않아요.</p>
     </section>
     <p>원본 링크 (최종 갱신 <span id="footUpdated"></span>):</p>
     <ul id="sources"></ul>
@@ -626,8 +642,8 @@ function renderQuick(s,r,used,note){
     <p class="note">${used} 계약 ${comma(r.package_n)}건 기준, ${desc}. 중간값 ${man(r.package_median)}, 가운데 50%는 ${man(r.package_p25)}~${man(r.package_p75)}.</p>
     ${note?`<p class="warnbox">${note}</p>`:""}${pick}
     ${scaleSVG(v,r)}
-    <a class="btn primary big" data-apply href="/apply/" target="_blank" rel="noopener">이 결과로 무료 검토 받기</a>
-    <p class="note" style="text-align:center">10월 31일까지 무료 · 이름이나 연락처는 받지 않아요</p>
+    <button type="button" class="btn primary big" data-apply>연락처 없이 무료 검토 신청</button>
+    <p class="note" style="text-align:center">10월 31일까지 무료 · 이름·전화번호·이메일 안 받아요</p>
     <a class="qmore" href="#form">따로 붙은 항목까지 넣고 예상 총액 보기 ↓</a>
   </div>`;
   qShown=true;
@@ -648,11 +664,55 @@ async function copy(text){
 }
 $("copyQs").addEventListener("click",()=>copy(lastQs));
 $("copySum").addEventListener("click",()=>copy(lastSummary));
-// 무료 검토 버튼(첫 화면·결과 화면): 누르면 결과를 복사해 두고 /apply/ 로 간다
+// ---------- 무료 검토 신청 (번호표) ----------
+// 누르면 검토 번호를 만들고 결과 요약만 구글 설문지로 보낸다(이름·연락처 없음). 신청이 들어오면 휘 지메일로 알림.
+const FORM_URL="https://docs.google.com/forms/d/1xEWm-sZsF9_f56Mqnpmd3UADxsXNbcZCot6OTgl41wA/formResponse";
+const F_CODE="entry.1622364006", F_SUM="entry.287703892";
+const CODE_CHARS="23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+function newCode(){ const a=new Uint32Array(6); crypto.getRandomValues(a); return [...a].map(n=>CODE_CHARS[n%CODE_CHARS.length]).join(""); }
+let sent={}; // 같은 결과로 두 번 누르면 같은 번호를 다시 보여 준다
+function ticketHTML(code,err){
+  const url=`sdmcheck.kr/r/?n=${code}`;
+  if(err) return `<div class="ticket"><p class="terr">신청을 보내지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.</p><button type="button" class="btn primary" data-apply>다시 신청하기</button></div>`;
+  return `<div class="ticket" role="status">
+    <p class="no">검토 번호</p><p class="code">${code}</p>
+    <div class="tsteps" aria-label="진행 단계: 접수됨"><div class="tst on"><i>1</i>접수</div><div class="tst"><i>2</i>검토 중</div><div class="tst"><i>3</i>답장 완료</div></div>
+    <p style="font-size:15px">하루 안에 아래 주소에 검토 결과가 올라와요. <b>주소를 꼭 저장해 두세요.</b> 이 화면을 닫으면 번호를 다시 찾을 수 없어요.</p>
+    <div class="turl">${url}</div>
+    <div class="tbtns"><button type="button" class="btn" data-tcopy="https://${url}">주소 복사</button><button type="button" class="btn" data-tshare="https://${url}">나에게 보내기</button></div>
+    <span class="copied" data-tmsg hidden>복사했어요</span>
+    <p class="note">10월 31일까지 무료예요. 결과 페이지엔 지역·항목·금액만 쓰고 업체 이름은 쓰지 않아요.</p>
+  </div>`;
+}
+async function apply(btn){
+  const s=readState(); const base=s.sep?s.studio+s.dress+s.makeup:s.pkg;
+  if(!base || base<QMIN){ $("pkg").focus(); $("pkg").scrollIntoView({block:"center"}); return; }
+  const anchor=btn.closest(".qout,.apply-here,.ticket")||btn.parentNode;
+  const holder=anchor.classList.contains("ticket")?anchor.parentNode:anchor;
+  let box=holder.querySelector(":scope > .tbox"); if(!box){ box=document.createElement("div"); box.className="tbox"; holder.append(box); }
+  const key=lastSummary;
+  if(sent[key]){ box.innerHTML=ticketHTML(sent[key]); return; }
+  btn.disabled=true; const old=btn.textContent; btn.textContent="보내는 중…";
+  const code=newCode();
+  const body=new URLSearchParams({[F_CODE]:code,[F_SUM]:lastSummary});
+  try{
+    await fetch(FORM_URL,{method:"POST",mode:"no-cors",body});
+    sent[key]=code; box.innerHTML=ticketHTML(code);
+    try{ const k="sdmcheck-codes"; const l=JSON.parse(localStorage.getItem(k)||"[]"); l.unshift({c:code,t:Date.now()}); localStorage.setItem(k,JSON.stringify(l.slice(0,5))); }catch(e){}
+    clearTimeout(countTimer); countResult(); // 결과 본 수를 먼저 세고, 신청 수(/applied/)를 센다
+    try{ history.pushState({applied:1},"","/applied/"); }catch(e){}
+  }catch(e){ box.innerHTML=ticketHTML(code,true); }
+  btn.disabled=false; btn.textContent=old;
+  box.scrollIntoView({block:"nearest",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+}
 document.addEventListener("click",e=>{
-  if(!e.target.closest("#applyBtn,[data-apply]")) return;
-  try{ navigator.clipboard.writeText("무료 견적 검토 신청해요.\n\n" + lastSummary); }catch(err){}
+  const a=e.target.closest("[data-apply]"); if(a){ apply(a); return; }
+  const c=e.target.closest("[data-tcopy]");
+  if(c){ const m=c.closest(".ticket").querySelector("[data-tmsg]"); navigator.clipboard?.writeText(c.dataset.tcopy).then(()=>{m.hidden=false;setTimeout(()=>m.hidden=true,1800)}).catch(()=>{}); return; }
+  const sh=e.target.closest("[data-tshare]");
+  if(sh){ const u=sh.dataset.tshare; if(navigator.share) navigator.share({title:"스드메체크 검토 번호",text:"스드메 견적 무료 검토 결과 주소",url:u}).catch(()=>{}); else navigator.clipboard?.writeText(u); }
 });
+$("applyJump").addEventListener("click",e=>{ e.preventDefault(); $("pkg").scrollIntoView({block:"center"}); $("pkg").focus({preventScroll:true}); });
 // 결과를 본 수 세기: 결과가 처음 나오면 주소를 /result/로 바꿔 방문 통계에 따로 잡히게 한다 (처음 한 번만)
 let resultCounted=false;
 function countResult(){
