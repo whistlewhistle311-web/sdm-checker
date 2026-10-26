@@ -666,7 +666,7 @@ $("copyQs").addEventListener("click",()=>copy(lastQs));
 $("copySum").addEventListener("click",()=>copy(lastSummary));
 // ---------- 무료 검토 신청 (번호표) ----------
 // 누르면 검토 번호를 만들고 결과 요약만 구글 설문지로 보낸다(이름·연락처 없음). 신청이 들어오면 휘 지메일로 알림.
-const FORM_URL="https://docs.google.com/forms/d/1xEWm-sZsF9_f56Mqnpmd3UADxsXNbcZCot6OTgl41wA/formResponse";
+const FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLSeHwOnQ6uqeWvEQHgDldnz7QLcvRWxQSuj2GdkbU5xsW1bTTQ/formResponse";
 const F_CODE="entry.1622364006", F_SUM="entry.287703892";
 const CODE_CHARS="23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 function newCode(){ const a=new Uint32Array(6); crypto.getRandomValues(a); return [...a].map(n=>CODE_CHARS[n%CODE_CHARS.length]).join(""); }
