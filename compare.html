@@ -200,7 +200,7 @@ function visible(){
 function renderList(){
   const vs = visible(), ul = $("list");
   ul.innerHTML = "";
-  if (!vs.length){ ul.innerHTML = `<li class="empty">찾는 업체가 없어요. 이름 일부만 넣어 보거나 '전체'를 눌러 보세요. 대행사 2곳 이상에 올라온 업체만 있어요.</li>`; return; }
+  if (!vs.length){ ul.innerHTML = `<li class="empty">찾는 업체가 없어요. 이름 일부만 넣어 보거나 '전체'를 눌러 보세요. 대행사 2곳 이상에 올라온 업체만 있어요.<br><a href="/#checker">못 찾았다면, 받은 견적 총액으로 비교하기 · 무료 검토</a></li>`; return; }
   vs.forEach(([v,i]) => {
     const li = document.createElement("li");
     li.innerHTML = `<button type="button" data-i="${i}" aria-current="${i===cur}"><span class="vn">${esc(v.n)}</span><span class="vm">${CAT[v.c]} · 대행사 ${v.e.length}곳</span></button>`;
