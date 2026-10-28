@@ -2,9 +2,9 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="naver-site-verification" content="c258fba80517545440ce348a0e5b5673a2a08643" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="받은 스드메 견적을 한국소비자원 참가격 실제 계약금액과 비교하고, 견적서에 안 적힌 추가금과 계약 전 질문을 보여주는 무료 계산기. 회원가입 없음.">
-<meta property="og:title" content="스드메 견적 검사기">
-<meta property="og:description" content="받은 스드메 견적, 비싼 편일까요? 한국소비자원이 조사한 실제 계약 1,768건과 비교해 드려요. 무료, 회원가입 없음.">
+<meta name="description" content="고른 스튜디오·드레스·메이크업 샵 이름을 넣으면 서울 대행사들이 한국소비자원 참가격에 공개한 가격을 원문 그대로 한 번에 보여 드려요. 받은 견적 검사기도 함께, 무료·회원가입 없음.">
+<meta property="og:title" content="같은 샵, 대행사마다 다른 가격 | 스드메체크">
+<meta property="og:description" content="샵 이름을 넣으면 대행사마다 공개한 가격을 원문 그대로 보여 드려요. 한국소비자원 참가격 자료, 무료.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sdmcheck.kr/">
 <meta property="og:image" content="https://sdmcheck.kr/og-v2.png">
@@ -12,7 +12,7 @@
 <link rel="icon" href="icon.png">
 <style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head><body>
-<title>스드메 견적 검사기 | 스드메체크</title>
+<title>같은 샵, 대행사마다 다른 가격 | 스드메체크</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
@@ -75,6 +75,52 @@ header.top{display:grid;gap:10px;padding:8px 8px 18px;max-width:40em}
 .qmore{font-weight:700;font-size:15px;text-decoration:none;padding:6px 0;justify-self:start}
 @media (prefers-reduced-motion:no-preference){.qout.rise{animation:rise .35s ease-out}@keyframes rise{from{transform:translateY(8px)}to{transform:none}}}
 @media (min-width:900px){.quick{max-width:none}.quick .qwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}}
+
+/* 첫 화면 샵 검색 (2026-10-28 휘 선택: Wise DESIGN.md 배치 — 바탕 띠 위 흰 카드 하나, 결과는 카드 안 대행사별 줄 목록
+   + Airbnb DESIGN.md의 바로가기 묶음). 가격은 원문 그대로, 대행사끼리 순위·차이는 만들지 않는다(소비자원 조건). */
+.shop{background:var(--band);border-radius:var(--r-card);padding:24px 16px;display:grid;gap:16px;margin:0 0 28px}
+@media (min-width:600px){.shop{padding:32px}}
+.shop .lede{color:var(--ink);opacity:.8}
+.shopcard{gap:14px;padding:18px}
+@media (min-width:600px){.shopcard{padding:24px}}
+.shopcard label{font-size:14px;font-weight:700;color:var(--muted)}
+#shopQ{width:100%;border:none;background:var(--soft);border-radius:var(--r-in);min-height:56px;padding:0 16px;font-size:18px;font-weight:700}
+#shopQ::placeholder{color:var(--muted);font-weight:500}
+.scats{display:flex;flex-wrap:wrap;gap:8px}
+.scats button{border:none;border-radius:var(--pill);min-height:40px;padding:0 14px;font-size:14px;font-weight:700;background:var(--bg);color:var(--ink);cursor:pointer}
+.scats button[aria-pressed="true"]{background:var(--accent-soft);color:var(--chip-ink)}
+.spick{display:flex;flex-wrap:wrap;gap:8px}
+.spick button{border:none;border-radius:var(--pill);min-height:40px;padding:0 14px;font-size:14px;font-weight:700;background:var(--bg);color:var(--ink);cursor:pointer}
+.spick button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.sres{display:grid;gap:10px}
+@media (prefers-reduced-motion:no-preference){.sres{animation:rise .3s ease-out}}
+.shead .tg{font-size:13px;font-weight:700;color:var(--muted)}
+.shead h3{font-size:21px;font-weight:800}
+.srows{display:grid}
+.srow{display:grid;gap:2px;padding:12px 0;border-top:1px solid var(--line)}
+.srow:first-child{border-top:none}
+.srow .t{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13px}
+.srow .t b{font-size:14.5px}
+.srow .t span{color:var(--muted);white-space:nowrap}
+.srow .pr{font-size:15px;font-weight:700;overflow-wrap:anywhere}
+.srow a{font-size:13px;font-weight:700;justify-self:start}
+.snote{font-size:13px;color:var(--muted)}
+.swarn{font-size:13.5px;background:var(--warn-soft);color:var(--warn);padding:8px 12px;border-radius:14px}
+.sbtn{display:flex;align-items:center;justify-content:center;min-height:52px;border:none;border-radius:var(--pill);background:var(--accent);color:var(--accent-ink);font-weight:800;font-size:16px;cursor:pointer;text-decoration:none;width:100%}
+.sbtn.ghost{background:var(--soft);color:var(--ink)}
+.sbtn:active{transform:scale(.97)}
+.shortcuts{display:grid;gap:8px}
+.shortcuts p{font-size:14px;font-weight:700}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (min-width:700px){.sgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.sgrid button{border:none;background:var(--paper);border-radius:16px;padding:10px 12px;text-align:left;cursor:pointer;display:grid;gap:1px;color:var(--ink)}
+.sgrid b{font-size:15px;overflow-wrap:anywhere}
+.sgrid span{font-size:12.5px;color:var(--muted)}
+.ssrc{font-size:12.5px;color:var(--muted)}
+.ssrc b{color:var(--ink)}
+@media (max-width:599px){.shop{gap:12px;padding-top:20px}.shop h1{font-size:30px}.shop .lede{font-size:15px}}
+@media (min-width:900px){.shop{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:start;column-gap:32px}.shopcard{grid-column:2;grid-row:1 / span 2}.shortcuts{grid-column:1;grid-row:2}}
+.dock.off{display:none!important}
 
 .grid{display:grid;gap:16px;grid-template-columns:1fr}
 @media (min-width:900px){.grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
@@ -213,7 +259,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 {"@type":"Question","name":"입력한 견적은 저장되나요?","acceptedAnswer":{"@type":"Answer","text":"아니요. 입력한 내용은 이 화면 안에서만 계산해요. 무료 검토를 신청할 때만 결과 요약(지역·금액·항목)과 검토 번호를 보내요. 이름·연락처는 받지 않고 회원가입도 없어요."}},
 {"@type":"Question","name":"비교하는 숫자는 어디서 온 건가요?","acceptedAnswer":{"@type":"Answer","text":"한국소비자원 참가격의 결혼서비스 가격정보(2026년 8월 조사분)를 정리했어요. 스드메 패키지는 소비자원이 업체를 조사해 모은 실제 계약금액의 분포와 비교해요."}},
 {"@type":"Question","name":"전체 시장 평균 가격인가요?","acceptedAnswer":{"@type":"Answer","text":"아니요. 소비자원이 조사한 업체들의 계약금액이라 전체 시장을 대표하는 값은 아니에요. 성수기, 요일, 시간대에 따라 실제 금액은 달라질 수 있어요."}},
-{"@type":"Question","name":"업체 이름도 알려 주나요?","acceptedAnswer":{"@type":"Answer","text":"검사기에서는 업체 이름을 다루지 않아요. 같은 업체를 대행사마다 얼마로 공개했는지는 대행사별 가격 페이지에서 원문 그대로 볼 수 있어요."}},
+{"@type":"Question","name":"업체 이름도 알려 주나요?","acceptedAnswer":{"@type":"Answer","text":"맨 위 샵 이름 검색과 대행사별 가격 페이지에서, 같은 업체를 대행사마다 얼마로 공개했는지 원문 그대로 볼 수 있어요. 견적 검사기는 업체 이름을 다루지 않아요."}},
 {"@type":"Question","name":"따로 붙은 항목은 무엇을 고르면 되나요?","acceptedAnswer":{"@type":"Answer","text":"견적서에 기본가와 별도로 금액이 적힌 항목을 고르면 돼요. 원본 데이터, 헬퍼비, 드레스 피팅비, 얼리스타트가 자주 따로 붙어요. 잘 모르겠으면 잘 모르겠어요를 누르면 보통 금액으로 더해서 보여 드려요."}},
 {"@type":"Question","name":"원본 데이터, 피팅비, 얼리스타트는 원래 기본 포함인가요?","acceptedAnswer":{"@type":"Answer","text":"공정거래위원회 결혼준비대행업 표준약관(2025년 4월 제정)은 사진파일 구입비, 드레스 피팅비, 메이크업 얼리스타트비를 기본서비스에 넣도록 권고해요. 강제는 아니어서 업체에 기본가 포함을 요청할 때 근거로 말할 수 있어요."}},
 {"@type":"Question","name":"업체는 가격을 꼭 공개해야 하나요?","acceptedAnswer":{"@type":"Answer","text":"네. 2025년 11월 12일부터 결혼서비스 사업자는 기본서비스와 선택품목 요금, 위약금과 환급 기준을 자기 홈페이지나 한국소비자원 참가격에 공개해야 해요. 2026년 8월부터 공정위가 집중 점검하고 있어요."}},
@@ -229,8 +275,26 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
     <a class="pill-link" href="/compare.html">대행사별 가격</a>
   </nav>
 
-  <header class="top">
-    <h1>받은 스드메 견적,<br><em>비싼 편일까요?</em></h1>
+  <section class="shop" aria-labelledby="shopH">
+    <div class="stext" style="display:grid;gap:12px;align-content:start">
+      <h1 id="shopH">같은 샵,<br><em>대행사마다 다른 가격</em></h1>
+      <p class="lede">고른 샵 이름을 넣으면 서울 대행사들이 소비자원에 공개한 가격을 원문 그대로 한 번에 보여 드려요.</p>
+    </div>
+    <div class="sheet shopcard">
+      <label for="shopQ">샵 이름</label>
+      <input id="shopQ" type="search" placeholder="스튜디오·드레스·메이크업 이름" autocomplete="off" enterkeyhint="search">
+      <div class="scats" id="shopCats" role="group" aria-label="구분"></div>
+      <div id="shopOut" aria-live="polite"><p class="snote">불러오는 중이에요…</p></div>
+      <p class="ssrc">출처 <b>한국소비자원 참가격</b> · 대행사별 공개일이 달라요 · 검색어는 저장 안 해요</p>
+    </div>
+    <div class="shortcuts" id="shopShort" hidden>
+      <p>대행사 여러 곳에 올라온 샵</p>
+      <div class="sgrid" id="shopGrid"></div>
+    </div>
+  </section>
+
+  <header class="top" id="checker">
+    <h2 style="font-size:clamp(26px,5.5vw,34px);line-height:1.25">받은 스드메 견적,<br><em style="font-style:normal;color:var(--accent)">비싼 편일까요?</em></h2>
     <p class="lede">지역과 총액만 넣으면 실제 계약 <b id="basisN"></b>건 중 어디쯤인지 바로 보여 드려요.</p>
   </header>
 
@@ -336,7 +400,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
     <details><summary>입력한 견적은 저장되나요?</summary><p>아니요. 입력한 내용은 이 화면 안에서만 계산해요. 무료 검토를 신청할 때만 결과 요약(지역·금액·항목)과 검토 번호를 보내요. 이름·연락처는 받지 않고 회원가입도 없어요.</p></details>
     <details><summary>비교하는 숫자는 어디서 온 건가요?</summary><p>한국소비자원 참가격의 결혼서비스 가격정보(2026년 8월 조사분)를 정리했어요. 스드메 패키지는 소비자원이 업체를 조사해 모은 실제 계약금액의 분포와 비교해요.</p></details>
     <details><summary>전체 시장 평균 가격인가요?</summary><p>아니요. 소비자원이 조사한 업체들의 계약금액이라 전체 시장을 대표하는 값은 아니에요. 성수기, 요일, 시간대에 따라 실제 금액은 달라질 수 있어요.</p></details>
-    <details><summary>업체 이름도 알려 주나요?</summary><p>검사기에서는 업체 이름을 다루지 않아요. 같은 업체를 대행사마다 얼마로 공개했는지는 <a href="/compare.html">대행사별 가격</a> 페이지에서 원문 그대로 볼 수 있어요.</p></details>
+    <details><summary>업체 이름도 알려 주나요?</summary><p>맨 위 샵 이름 검색과 <a href="/compare.html">대행사별 가격</a> 페이지에서, 같은 업체를 대행사마다 얼마로 공개했는지 원문 그대로 볼 수 있어요. 견적 검사기는 업체 이름을 다루지 않아요.</p></details>
     <details><summary>따로 붙은 항목은 무엇을 고르면 되나요?</summary><p>견적서에 기본가와 별도로 금액이 적힌 항목을 고르면 돼요. 원본 데이터, 헬퍼비, 드레스 피팅비, 얼리스타트가 자주 따로 붙어요. 잘 모르겠으면 '잘 모르겠어요'를 누르면 보통 금액으로 더해서 보여 드려요.</p></details>
     <details><summary>원본 데이터, 피팅비, 얼리스타트는 원래 기본 포함인가요?</summary><p>공정거래위원회 결혼준비대행업 표준약관(2025년 4월 제정)은 사진파일 구입비, 드레스 피팅비, 메이크업 얼리스타트비를 기본서비스에 넣도록 권고해요. 강제는 아니어서 업체에 기본가 포함을 요청할 때 근거로 말할 수 있어요.</p></details>
     <details><summary>업체는 가격을 꼭 공개해야 하나요?</summary><p>네. 2025년 11월 12일부터 결혼서비스 사업자는 기본서비스와 선택품목 요금, 위약금과 환급 기준을 자기 홈페이지나 한국소비자원 참가격에 공개해야 해요. 2026년 8월부터 공정위가 집중 점검하고 있어요.</p></details>
@@ -725,6 +789,47 @@ $("form").addEventListener("submit",e=>e.preventDefault());
 
 // 처음엔 비어 있는 상태로 시작: 따로 붙은 항목은 '잘 모르겠어요'(보통 금액으로 더함)
 setPressed("unsure",true); applyQuick(); render();
+
+// ---------- 첫 화면 샵 검색 (자료: /shops.json = 비교 페이지와 같은 원문 자료) ----------
+(function(){
+  const SC={studio:"스튜디오",dress:"드레스",makeup:"메이크업"};
+  const e2=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const nm=s=>s.toLowerCase().replace(/\s|스튜디오|studio|웨딩|드레스|메이크업|헤어|\(.*?\)|㈜|\(주\)/g,"");
+  const out=$("shopOut"); let S=null, cat="all", foundTimer=0, foundCounted=false;
+  const smooth=()=>matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth";
+  $("shopCats").innerHTML=[["all","전체"],["studio","스튜디오"],["dress","드레스"],["makeup","메이크업"]].map(([k,t])=>`<button type="button" data-c="${k}" aria-pressed="${k==="all"}">${t}</button>`).join("");
+  const idle=()=>`<p class="snote">대행사 2곳 이상에 올라온 서울 업체 ${S.v.length}곳을 찾을 수 있어요.</p>`;
+  function find(q){q=nm(q.trim());return S.v.map((v,i)=>[v,i]).filter(([v])=>(cat==="all"||v.c===cat)&&(!q||nm(v.n).includes(q)||v.e.some(e=>e.n.some(n=>nm(n).includes(q)))));}
+  function rows(i){const v=S.v[i], old=v.e.some(e=>{const a=S.A[e.a];return a&&a.p&&a.p<"2026-07-01";});
+    return `<div class="sres"><div class="shead"><span class="tg">${SC[v.c]} · 대행사 ${v.e.length}곳 · 원문 그대로</span><h3>${e2(v.n)}</h3></div>
+      <div class="srows">${v.e.map(e=>{const a=S.A[e.a]||{n:e.a};return `<div class="srow"><div class="t"><b>${e2(a.n)}</b><span>${a.p?"공개일 "+e2(a.p):"공개일 표시 없음"}</span></div><div class="pr">${e.l.map(e2).join("<br>")}</div>${a.u?`<a href="${e2(a.u)}" target="_blank" rel="noopener">참가격 원문 표 ↗</a>`:""}</div>`;}).join("")}</div>
+      ${old?`<p class="swarn">공개일이 오래된 자료가 있어요. 지금 가격은 다를 수 있어요.</p>`:""}
+      <p class="snote">대행사마다 상품 구성(포함 항목, 벌수, 시간대)이 달라요. 같은 줄로 비교하기 전에 구성이 같은지 원문 표에서 먼저 보세요.</p>
+      <button type="button" class="sbtn" data-go="checker">이 샵 견적 받았어요 · 총액 넣고 무료 검토</button></div>`;}
+  function countFound(){ if(foundCounted||!history.pushState) return; foundCounted=true; try{history.pushState({found:1},"","/found/"+location.hash);}catch(e){} }
+  function show(i,list){ clearTimeout(foundTimer);
+    out.innerHTML=(list&&list.length>1?`<div class="spick" style="margin-bottom:12px">${list.slice(0,6).map(([v,k])=>`<button type="button" data-i="${k}" aria-pressed="${k===i}">${e2(v.n)}</button>`).join("")}</div>`:"")+`<div id="shopRes">${rows(i)}</div>`;
+    foundTimer=setTimeout(countFound,1000); }
+  function run(){ if(!S) return; const q=$("shopQ").value;
+    if(!q.trim()){ clearTimeout(foundTimer); out.innerHTML=idle(); return; }
+    const r=find(q);
+    if(!r.length){ clearTimeout(foundTimer); out.innerHTML=`<div class="sres"><p><b>'${e2(q.trim())}'</b>는 아직 없어요.</p><p class="snote">대행사 2곳 이상에 올라온 서울 업체만 있어요. 이름 일부만 넣어 보거나, 받은 견적 총액으로 비교해 보세요.</p><button type="button" class="sbtn ghost" data-go="checker">받은 견적 총액으로 비교하기</button></div>`; return; }
+    show(r[0][1],r); }
+  let lifted=false;
+  $("shopQ").addEventListener("input",()=>{ run(); if(!lifted && matchMedia("(max-width:899px)").matches){ lifted=true; $("shopQ").scrollIntoView({behavior:smooth(),block:"start"}); } });
+  // 아래 고정 바(예상 총액)는 견적 검사기용이라, 샵 검색 구역이 보일 때는 숨긴다
+  const dock=document.getElementById("dock");
+  if(dock && "IntersectionObserver" in window){ new IntersectionObserver(es=>es.forEach(en=>dock.classList.toggle("off",en.isIntersecting)),{threshold:0}).observe(document.querySelector(".shop")); }
+  $("shopCats").addEventListener("click",e=>{const b=e.target.closest("[data-c]");if(!b)return;cat=b.dataset.c;$("shopCats").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));run();});
+  out.addEventListener("click",e=>{const b=e.target.closest("[data-i]"); if(b){out.querySelectorAll(".spick button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));$("shopRes").innerHTML=rows(+b.dataset.i);clearTimeout(foundTimer);foundTimer=setTimeout(countFound,1000);}});
+  document.addEventListener("click",e=>{const g=e.target.closest("[data-go=checker]"); if(!g) return; $("checker").scrollIntoView({behavior:smooth(),block:"start"}); setTimeout(()=>$("region").focus({preventScroll:true}),400);});
+  $("shopGrid").addEventListener("click",e=>{const b=e.target.closest("[data-i]"); if(!b) return; const i=+b.dataset.i; $("shopQ").value=S.v[i].n; cat="all"; $("shopCats").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.c==="all"))); show(i,null); $("shopQ").scrollIntoView({behavior:smooth(),block:"center"});});
+  fetch("/shops.json").then(r=>{if(!r.ok) throw 0; return r.json();}).then(d=>{
+    S={v:d.v, A:Object.fromEntries(d.a.map(a=>[a.n,a]))};
+    $("shopGrid").innerHTML=S.v.slice(0,8).map((v,i)=>`<button type="button" data-i="${i}"><b>${e2(v.n)}</b><span>${SC[v.c]} · 대행사 ${v.e.length}곳</span></button>`).join("");
+    $("shopShort").hidden=false; run();
+  }).catch(()=>{ out.innerHTML=`<p class="snote">샵 목록을 못 불러왔어요. <a href="/compare.html">대행사별 가격</a> 페이지에서 찾아 주세요.</p>`; });
+})();
 </script>
 
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "354298f8ef5e4e84ac72db4cfffef2d9", "spa": true}'></script><!-- End Cloudflare Web Analytics -->
