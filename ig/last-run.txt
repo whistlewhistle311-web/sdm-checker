@@ -1,0 +1,2 @@
+연결 OK: @sdm.check 게시물 12개
+하루 게시 한도: [{"quota_usage": 0, "config": {"quota_total": 100, "quota_duration": 86400}}]
