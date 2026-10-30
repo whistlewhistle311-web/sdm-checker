@@ -390,7 +390,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
   </div>
 
   <section class="apply" aria-labelledby="applyH">
-    <h2 id="applyH">무료 견적 검토<br><span>10월 31일까지 무료</span></h2>
+    <h2 id="applyH">무료 견적 검토<br><span>지금은 무료</span></h2>
     <p>위에서 지역과 총액을 넣고 '연락처 없이 무료 검토 신청'을 누르면 끝이에요. 검토 번호가 나오고, 하루 안에 그 번호의 주소에 검토 결과가 올라와요.</p>
     <a class="go" href="#pkg" id="applyJump">총액 넣고 신청하기</a>
     <p class="small">이름·전화번호·이메일은 받지 않아요. 견적서 사진을 같이 보여 주고 싶으면 인스타그램 <a href="/dm/" target="_blank" rel="noopener" style="color:inherit">@sdm.check</a> DM도 돼요(이름·연락처·계약번호는 가려 주세요).</p>
@@ -708,7 +708,7 @@ function renderQuick(s,r,used,note){
     ${note?`<p class="warnbox">${note}</p>`:""}${pick}
     ${scaleSVG(v,r)}
     <button type="button" class="btn primary big" data-apply>연락처 없이 무료 검토 신청</button>
-    <p class="note" style="text-align:center">10월 31일까지 무료 · 이름·전화번호·이메일 안 받아요</p>
+    <p class="note" style="text-align:center">지금은 무료 · 이름·전화번호·이메일 안 받아요</p>
     <a class="qmore" href="#form">따로 붙은 항목까지 넣고 예상 총액 보기 ↓</a>
   </div>`;
   qShown=true;
@@ -746,7 +746,7 @@ function ticketHTML(code,err){
     <div class="turl">${url}</div>
     <div class="tbtns"><button type="button" class="btn" data-tcopy="https://${url}">주소 복사</button><button type="button" class="btn" data-tshare="https://${url}">나에게 보내기</button></div>
     <span class="copied" data-tmsg hidden>복사했어요</span>
-    <p class="note">10월 31일까지 무료예요. 결과 페이지엔 지역·항목·금액만 쓰고 업체 이름은 쓰지 않아요.</p>
+    <p class="note">지금은 무료예요. 결과 페이지엔 지역·항목·금액만 쓰고 업체 이름은 쓰지 않아요.</p>
   </div>`;
 }
 async function apply(btn){
