@@ -1,0 +1,55 @@
+name: 스레드
+
+# threads/CHECK 바뀜 → 연결 확인 / threads/SEARCH 바뀜 → 검색 / threads/queue/*/APPROVED → 게시
+# 매주 월요일 → 토큰 연장
+on:
+  push:
+    branches: [main]
+    paths:
+      - "threads/CHECK"
+      - "threads/SEARCH"
+      - "threads/queue/**/APPROVED"
+  schedule:
+    - cron: "17 1 * * 1"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "check / refresh / search / publish"
+        default: "check"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: threads
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 모드 정하기
+        id: mode
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then m="${{ github.event.inputs.mode }}"
+          elif [ "${{ github.event_name }}" = "schedule" ]; then m=refresh
+          else
+            ch=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} || true)
+            if echo "$ch" | grep -q '/APPROVED$'; then m=publish
+            elif echo "$ch" | grep -q '^threads/SEARCH$'; then m=search
+            else m=check; fi
+          fi
+          echo "mode=$m" >> "$GITHUB_OUTPUT"
+      - name: 실행
+        env:
+          THREADS_TOKEN: ${{ secrets.THREADS_TOKEN }}
+        run: python threads/tools/th.py "${{ steps.mode.outputs.mode }}" | tee threads/last-run.txt
+      - name: 결과 기록
+        if: always()
+        run: |
+          git config user.name "sdmcheck-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add threads/last-run.txt
+          git add threads/search threads/queue 2>/dev/null || true
+          git diff --cached --quiet || (git commit -m "스레드 실행 결과 기록" && git pull --rebase -q && git push)
