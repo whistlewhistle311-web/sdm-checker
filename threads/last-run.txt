@@ -1,2 +1,3 @@
 연결 OK: @sdm.check (id 29375434598717138)
 게시·답글 한도: [{"quota_usage": 0, "config": {"quota_total": 250, "quota_duration": 86400}, "reply_quota_usage": 0, "reply_config": {"quota_total": 1000, "quota_duration": 86400}}]
+게시 완료: 2026-10-30-blog19 → https://www.threads.com/@sdm.check/post/DfHGh-Mlswx
