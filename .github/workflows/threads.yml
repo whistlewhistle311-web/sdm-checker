@@ -53,5 +53,6 @@ jobs:
           git config user.name "sdmcheck-bot"
           git config user.email "actions@users.noreply.github.com"
           git add threads/last-run.txt
-          git add threads/search threads/queue 2>/dev/null || true
+          git add threads/search 2>/dev/null || true
+          git add threads/queue 2>/dev/null || true
           git diff --cached --quiet || (git commit -m "스레드 실행 결과 기록" && git pull --rebase -q && git push)
