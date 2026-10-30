@@ -42,7 +42,8 @@ def call(method, path, base=API, **params):
             return json.load(r)
     except urllib.error.HTTPError as e:
         body = e.read().decode(errors="replace").replace(params["access_token"], "***")
-        sys.exit(f"API 오류 {e.code} {path}: {body}")
+        print(f"API 오류 {e.code} {path}: {body}")
+        sys.exit(1)
 
 
 def check():
@@ -50,6 +51,8 @@ def check():
     print(f"연결 OK: @{me.get('username')} (id {me.get('id')})")
     if me.get("username") != "sdm.check":
         sys.exit("계정이 sdm.check가 아님 — 중단")
+    lim = call("GET", "me/threads_publishing_limit", fields="quota_usage,config,reply_quota_usage,reply_config")
+    print("게시·답글 한도:", json.dumps(lim.get("data", lim), ensure_ascii=False))
     return me
 
 

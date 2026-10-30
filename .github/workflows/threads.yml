@@ -46,7 +46,7 @@ jobs:
       - name: 실행
         env:
           THREADS_TOKEN: ${{ secrets.THREADS_TOKEN }}
-        run: python threads/tools/th.py "${{ steps.mode.outputs.mode }}" | tee threads/last-run.txt
+        run: set -o pipefail; python threads/tools/th.py "${{ steps.mode.outputs.mode }}" | tee threads/last-run.txt
       - name: 결과 기록
         if: always()
         run: |

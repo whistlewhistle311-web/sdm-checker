@@ -40,7 +40,7 @@ jobs:
       - name: 실행
         env:
           IG_PAGE_TOKEN: ${{ secrets.IG_PAGE_TOKEN }}
-        run: python ig/tools/ig_publish.py "${{ steps.mode.outputs.mode }}" | tee ig/last-run.txt
+        run: set -o pipefail; python ig/tools/ig_publish.py "${{ steps.mode.outputs.mode }}" | tee ig/last-run.txt
       - name: 결과 기록
         if: always()
         run: |
