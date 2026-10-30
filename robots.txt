@@ -2,4 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /r/
 Disallow: /applied/
+Disallow: /ig/
+Disallow: /threads/
+Disallow: /tools/
 Sitemap: https://sdmcheck.kr/sitemap.xml
