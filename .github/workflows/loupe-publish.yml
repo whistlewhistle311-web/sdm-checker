@@ -1,0 +1,51 @@
+name: 루페 인스타 게시
+
+# loupe/posts/<폴더>/APPROVED 가 push되면 게시. loupe/CHECK 가 바뀌면 연결 확인만.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "loupe/posts/**/APPROVED"
+      - "loupe/CHECK"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "check 또는 publish"
+        default: "check"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: loupe-publish
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: 모드 정하기
+        id: mode
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "mode=${{ github.event.inputs.mode }}" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '/APPROVED$'; then
+            echo "mode=publish" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=check" >> "$GITHUB_OUTPUT"
+          fi
+      - name: 실행
+        env:
+          IG_PAGE_TOKEN: ${{ secrets.LOUPE_IG_TOKEN }}
+        run: set -o pipefail; python loupe/tools/ig_publish.py "${{ steps.mode.outputs.mode }}" | tee loupe/last-run.txt
+      - name: 결과 기록
+        if: always()
+        run: |
+          git config user.name "sdmcheck-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add loupe/last-run.txt
+          git add loupe/posts 2>/dev/null || true
+          git diff --cached --quiet || (git commit -m "인스타 게시 결과 기록" && git push)
