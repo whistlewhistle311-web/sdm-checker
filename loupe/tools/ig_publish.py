@@ -20,7 +20,7 @@ import urllib.request
 from pathlib import Path
 
 API = "https://graph.facebook.com/v26.0"
-IG_USER_ID = os.environ.get("LOUPE_IG_USER_ID", "").strip()  # 비어 있으면 토큰의 페이지에서 찾음
+IG_USER_ID = os.environ.get("LOUPE_IG_USER_ID", "").strip() or "17841462152983275"  # @loupe.jewel (공개 ID, 비밀 아님)
 REPO_RAW = "https://raw.githubusercontent.com/whistlewhistle311-web/sdm-checker/main"
 ROOT = Path(__file__).resolve().parents[2]
 POSTS = ROOT / "loupe" / "posts"
