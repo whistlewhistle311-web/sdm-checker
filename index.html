@@ -576,7 +576,11 @@ function applyQuick(){
     else setItem(id, id==="early_start"?"none":"included");
   }));
 }
+// 신청자가 추가금 항목을 직접 골랐는지 (기본값 그대로면 검토 쪽에 '고르지 않음'으로 알린다)
+let itemsTouched=false;
+document.addEventListener("change",e=>{ if(e.target.closest && e.target.closest(".item")) itemsTouched=true; });
 chipEls.forEach(b=>b.addEventListener("click",()=>{
+  itemsTouched=true;
   const q=b.dataset.q, on=!pressed(q);
   if(q==="unsure"){ Object.keys(QUICK).forEach(k=>setPressed(k,false)); }
   else setPressed("unsure",false);
@@ -720,7 +724,8 @@ function render(){
     verdictLine||"(기본가 미입력)",
     `견적서 추가금 ${man(paidSum)} + 안 적힌 추가금 예상 ${man(unkTyp)}`,
     `예상 총액 ${base?man(total):"-"}`,
-    ...flags.filter(f=>f[0]!=="ok").slice(0,5).map(f=>"· "+f[1]),
+    itemsTouched ? "추가금 항목: 신청자가 직접 고름" : "추가금 항목: 신청자가 고르지 않음(기본값 '잘 모르겠어요'). 아래 '확인 안 함'은 견적서에 없다는 뜻이 아님",
+    ...flags.filter(f=>f[0]!=="ok").slice(0,5).map(f=>"· "+(itemsTouched?f[1]:f[1].replace(": 견적서에 없음",": 확인 안 함"))),
     "출처: 한국소비자원 참가격 (업체 자료 갱신·성수기 등에 따라 실제 금액은 다를 수 있음)"].join("\n");
   // 결과가 나온 채로 1초 동안 입력이 멈추면 '결과 봄'으로 한 번 센다 (치는 중인 숫자는 세지 않음)
   clearTimeout(countTimer);
