@@ -109,7 +109,7 @@ def page(x, rel):
 <li>이 가격에 무엇이 들어 있나요? (촬영 시간·앨범·원본, 드레스 벌수, 메이크업 직급·횟수)</li>
 <li>최근 공개된 가격 기준으로는 얼마인가요?</li>
 <li>원본·헬퍼비·피팅비·얼리스타트가 포함인지 계약서에 적어 주실 수 있나요?</li></ul></section>
-<section class="cta"><a class="btn" href="/#checker">이 샵 견적 받았어요 · 총액 넣고 무료 검토</a><a class="btn sub" href="/">다른 샵 이름으로 찾기</a></section>
+<section class="cta"><a class="btn" href="/#checker">내 견적 총액으로 비교하기</a><a class="btn sub" href="/">다른 샵 이름으로 찾기</a></section>
 <section style="display:grid;gap:10px"><h2>같이 많이 보는 {c}</h2><div class="rel">{relh}</div></section>"""
     out = ROOT / url(x).strip("/")
     out.mkdir(parents=True, exist_ok=True)

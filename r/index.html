@@ -74,17 +74,18 @@ ol{margin:0;padding-left:20px;display:grid;gap:6px}
     <p class="no">검토 번호</p>
     <p class="code" id="code"></p>
     <div class="steps" id="steps" aria-label="진행 단계">
-      <div class="st on"><i>1</i>접수</div><div class="st" id="s2"><i>2</i>검토 중</div><div class="st" id="s3"><i>3</i>답장 완료</div>
+      <div class="st on"><i>1</i>접수</div><div class="st" id="s2"><i>2</i>검토 중</div><div class="st" id="s3"><i>3</i>결과 게시</div>
     </div>
     <div id="waiting" hidden>
       <h1>검토하고 있어요</h1>
-      <p class="muted" style="margin-top:8px">보통 하루 안에 이 주소에 검토 결과가 올라와요. 이 주소를 저장해 두고 나중에 다시 열어 주세요.</p>
+      <p class="muted" style="margin-top:8px">이틀 안팎으로 이 주소에 검토 결과가 올라와요. 이 주소를 저장해 두고 나중에 다시 열어 주세요.</p>
     </div>
     <div id="done" hidden style="display:grid;gap:16px">
       <div><h1 id="headline"></h1><p class="muted" id="meta" style="margin-top:6px"></p></div>
       <div id="points" style="display:grid;gap:8px"></div>
       <div id="qsWrap" hidden><h2 style="margin-bottom:8px">계약 전에 물어볼 것</h2><ol id="qs"></ol></div>
       <p class="muted" id="closing"></p>
+      <p class="muted" style="font-size:13.5px">이 결과는 넣으신 지역·금액·항목을 바탕으로 AI가 쓰고, 다른 AI가 한 번 더 검수했어요.</p>
     </div>
     <p class="muted" id="err" hidden>결과를 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>
     <a class="btn ghost" href="/">검사기로 돌아가기</a>

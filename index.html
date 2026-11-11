@@ -177,6 +177,10 @@ details.detail[open]>summary{margin-bottom:8px}
 @media (max-width:560px){.item{grid-template-columns:1fr}.item .ctl{justify-content:flex-start}}
 details.more>summary{cursor:pointer;color:var(--accent);font-weight:700;font-size:15px;padding:12px 0;list-style:none}
 details.more>summary::-webkit-details-marker{display:none}
+details.review-example>summary{position:relative;padding-right:28px}
+details.review-example>summary::after{content:"+";position:absolute;right:0;top:6px;font-weight:400;font-size:22px;color:var(--muted)}
+details.review-example[open]>summary::after{content:"−"}
+.tbox{scroll-margin-bottom:96px}
 .cat{font-size:13px;color:var(--muted);font-weight:700;margin-top:16px}
 
 /* 무료 검토 번호표 (시안 C, 2026-10-26 휘 선택: 인터넷우체국 배송조회식 번호 + 단계 표시) */
@@ -265,7 +269,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 {"@type":"Question","name":"원본 데이터, 피팅비, 얼리스타트는 원래 기본 포함인가요?","acceptedAnswer":{"@type":"Answer","text":"공정거래위원회 결혼준비대행업 표준약관(2025년 4월 제정)은 사진파일 구입비, 드레스 피팅비, 메이크업 얼리스타트비를 기본서비스에 넣도록 권고해요. 강제는 아니어서 업체에 기본가 포함을 요청할 때 근거로 말할 수 있어요."}},
 {"@type":"Question","name":"업체는 가격을 꼭 공개해야 하나요?","acceptedAnswer":{"@type":"Answer","text":"네. 2025년 11월 12일부터 결혼서비스 사업자는 기본서비스와 선택품목 요금, 위약금과 환급 기준을 자기 홈페이지나 한국소비자원 참가격에 공개해야 해요. 2026년 8월부터 공정위가 집중 점검하고 있어요."}},
 {"@type":"Question","name":"계약을 취소하면 위약금은 얼마인가요?","acceptedAnswer":{"@type":"Answer","text":"소비자분쟁해결기준으로는 대행 개시 전이면 총 대행요금의 10%를 빼고 돌려받아요. 계약서에 다른 조항이 있으면 그게 먼저 적용될 수 있으니 서명 전에 위약금 조항을 확인하세요."}},
-{"@type":"Question","name":"무료 견적 검토는 어떻게 신청하나요?","acceptedAnswer":{"@type":"Answer","text":"지역과 총액을 넣고 결과 아래 연락처 없이 무료 검토 신청을 누르면 돼요. 검토 번호와 주소가 나오고, 하루 안에 그 주소에 검토 결과가 올라와요. 이름·전화번호·이메일은 받지 않아요."}},
+{"@type":"Question","name":"무료 견적 검토는 어떻게 신청하나요?","acceptedAnswer":{"@type":"Answer","text":"지역과 총액을 넣고 결과 아래 '연락처 없이 무료 검토 신청'을 누르면 돼요. 검토 번호와 주소가 나오고, 이틀 안팎으로 그 주소에 검토 결과가 올라와요. 이름·전화번호·이메일은 받지 않아요."}},
 {"@type":"Question","name":"숫자가 틀린 것 같으면 어떻게 하나요?","acceptedAnswer":{"@type":"Answer","text":"인스타그램 @sdm.check DM으로 어느 부분인지 알려 주세요. 원자료와 대조해서 고치고, 고친 내용과 날짜를 페이지에 적어 둘게요."}}
 ]}
 </script>
@@ -376,9 +380,17 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
         <h3 style="margin-bottom:10px">계약 전에 물어볼 것</h3>
         <ol class="qs" id="qs"></ol>
       </div>
-      <section class="review-example" aria-label="무료 검토 결과 예시" style="border:1px dashed #b9b2a6;border-radius:12px;padding:16px 18px;margin:20px 0 12px;background:#faf8f4">
-        <p style="margin:0 0 6px;font-weight:700;color:#8a3b2e">예시예요. 실제 신청하신 분의 견적이 아닙니다.</p>
-        <p style="margin:0 0 14px;color:#555">내 견적도 지역·항목·금액만 넣으면 이렇게 정리해 드려요. 이름·연락처는 안 받아요. 검토 번호가 나오고, 하루 안에 그 번호의 주소에 결과가 올라와요.</p>
+      <div class="apply-here">
+        <h3 style="margin-bottom:6px">글로 정리한 검토 결과 받기</h3>
+        <p class="note" style="margin-bottom:10px">무료 검토를 신청하면 넣은 지역·금액·추가금을 참가격 숫자와 대조해서, 기본가 위치와 놓치기 쉬운 추가금 항목, 물어볼 것 3가지를 글로 정리해 올려요.</p>
+        <p class="note" style="margin-bottom:10px">검토 결과는 넣으신 지역·금액·고른 항목을 바탕으로 AI가 쓰고, 다른 AI가 한 번 더 검수해서 올려요. 견적서나 계약서 원본은 받지 않고, 넣으신 숫자만 봐요.</p>
+        <button type="button" class="btn primary big" id="applyBtn" data-apply>연락처 없이 무료 검토 신청</button>
+        <p class="note" style="margin-top:8px">이름·전화번호·이메일 없이 접수해요. 검토 번호가 나오고, 이틀 안팎으로 그 번호의 주소에 검토 결과가 올라와요. 주소는 꼭 복사해 두세요.</p>
+      </div>
+      <details class="more review-example" style="border:1px dashed var(--muted);border-radius:12px;padding:4px 18px;margin:8px 0 12px;background:var(--bg)">
+        <summary>무료 검토 결과 예시 보기 (가상 사례)</summary>
+        <p style="margin:6px 0 6px;font-weight:700;color:var(--warn)">예시예요. 실제 신청하신 분의 견적이 아닙니다.</p>
+        <p style="margin:0 0 14px;color:var(--muted)">내 견적도 지역·항목·금액만 넣으면 이렇게 정리해 드려요. 이름·연락처는 안 받아요. 검토 번호가 나오고, 이틀 안팎으로 그 번호의 주소에 결과가 올라와요.</p>
 
         <p style="margin:0 0 4px;font-weight:700">받은 견적 (가상)</p>
         <ul style="margin:0 0 14px;padding-left:18px">
@@ -409,12 +421,8 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
           <li>제가 해지하면 대행 시작 전과 후 위약금이 각각 얼마인지 계약서에 적혀 있나요?</li>
         </ol>
 
-        <p style="margin:0;font-size:13px;color:#666">출처: 한국소비자원 참가격 결혼서비스 지역별 가격(2026년 9월 조사분, 2026-11-04 확인. 표본 패키지 566건, 원본 109건, 피팅비 152건, 얼리스타트 145건, 헬퍼 166건). 가격은 바뀔 수 있고 성수기·비수기에 따라 실제 금액이 달라요. 최신 정보는 <a href="https://www.price.go.kr/tprice/portal/wedding/areaStatisticDetailSDM.do" target="_blank" rel="noopener">참가격</a>(price.go.kr)에서 확인하세요. 공정위 시정 내용: <a href="https://www.korea.kr/news/policyNewsView.do?newsId=156659944" target="_blank" rel="noopener">정책브리핑(korea.kr) 2024-11-12</a></p>
-      </section>
-      <div class="apply-here">
-        <button type="button" class="btn primary big" id="applyBtn" data-apply>연락처 없이 무료 검토 신청</button>
-        <p class="note" style="margin-top:8px">누르면 검토 번호가 나와요. 하루 안에 그 번호의 주소에 검토 결과가 올라와요. 이름·전화번호·이메일은 받지 않아요.</p>
-      </div>
+        <p style="margin:0 0 14px;font-size:13px;color:var(--muted)">출처: 한국소비자원 참가격 결혼서비스 지역별 가격(2026년 9월 조사분, 2026-11-04 확인. 위 검사기는 8월 조사분이라 숫자가 조금 다를 수 있어요. 표본 패키지 566건, 원본 109건, 피팅비 152건, 얼리스타트 145건, 헬퍼 166건). 가격은 바뀔 수 있고 성수기·비수기에 따라 실제 금액이 달라요. 최신 정보는 <a href="https://www.price.go.kr/tprice/portal/wedding/areaStatisticDetailSDM.do" target="_blank" rel="noopener">참가격</a>(price.go.kr)에서 확인하세요. 공정위 시정 내용: <a href="https://www.korea.kr/news/policyNewsView.do?newsId=156659944" target="_blank" rel="noopener">정책브리핑(korea.kr) 2024-11-12</a></p>
+      </details>
       <div class="actions">
         <button type="button" class="btn" id="copyQs">질문 복사</button>
         <button type="button" class="btn" id="copySum">결과 복사 (카톡 공유용)</button>
@@ -426,9 +434,9 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
 
   <section class="apply" aria-labelledby="applyH">
     <h2 id="applyH">무료 견적 검토<br><span>지금은 무료</span></h2>
-    <p>위에서 지역과 총액을 넣고 '연락처 없이 무료 검토 신청'을 누르면 끝이에요. 검토 번호가 나오고, 하루 안에 그 번호의 주소에 검토 결과가 올라와요.</p>
-    <a class="go" href="#pkg" id="applyJump">총액 넣고 신청하기</a>
-    <p class="small">이름·전화번호·이메일은 받지 않아요. 견적서 사진을 같이 보여 주고 싶으면 인스타그램 <a href="/dm/" target="_blank" rel="noopener" style="color:inherit">@sdm.check</a> DM도 돼요(이름·연락처·계약번호는 가려 주세요).</p>
+    <p>비교 결과는 총액만 넣으면 바로 나와요. 검토 결과를 글로 받고 싶으면 무료 검토를 신청하세요. 검토 번호가 나오고, 이틀 안팎으로 그 번호의 주소에 검토 결과가 올라와요.</p>
+    <a class="go" href="#pkg" id="applyJump">총액 넣고 검토 신청하기</a>
+    <p class="small">이름·전화번호·이메일은 받지 않아요. 지역·금액·고른 항목 요약과 검토 번호만 보내요. 견적서 사진을 같이 보여 주고 싶으면 인스타그램 <a href="/dm/" target="_blank" rel="noopener" style="color:inherit">@sdm.check</a> DM도 돼요(이름·연락처·계약번호는 가려 주세요).</p>
   </section>
 
   <section class="faq" aria-labelledby="faqH">
@@ -441,7 +449,7 @@ footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
     <details><summary>원본 데이터, 피팅비, 얼리스타트는 원래 기본 포함인가요?</summary><p>공정거래위원회 결혼준비대행업 표준약관(2025년 4월 제정)은 사진파일 구입비, 드레스 피팅비, 메이크업 얼리스타트비를 기본서비스에 넣도록 권고해요. 강제는 아니어서 업체에 기본가 포함을 요청할 때 근거로 말할 수 있어요.</p></details>
     <details><summary>업체는 가격을 꼭 공개해야 하나요?</summary><p>네. 2025년 11월 12일부터 결혼서비스 사업자는 기본서비스와 선택품목 요금, 위약금과 환급 기준을 자기 홈페이지나 한국소비자원 참가격에 공개해야 해요. 2026년 8월부터 공정위가 집중 점검하고 있어요.</p></details>
     <details><summary>계약을 취소하면 위약금은 얼마인가요?</summary><p>소비자분쟁해결기준으로는 대행 개시 전이면 총 대행요금의 10%를 빼고 돌려받아요. 계약서에 다른 조항이 있으면 그게 먼저 적용될 수 있으니 서명 전에 위약금 조항을 확인하세요. 자세한 기준은 아래 '환불·위약금'에 정리해 뒀어요.</p></details>
-    <details><summary>무료 견적 검토는 어떻게 신청하나요?</summary><p>지역과 총액을 넣고 결과 아래 '연락처 없이 무료 검토 신청'을 누르면 돼요. 검토 번호와 주소가 나오고, 하루 안에 그 주소에 검토 결과가 올라와요. 이름·전화번호·이메일은 받지 않아요.</p></details>
+    <details><summary>무료 견적 검토는 어떻게 신청하나요?</summary><p>지역과 총액을 넣고 결과 아래 '연락처 없이 무료 검토 신청'을 누르면 돼요. 검토 번호와 주소가 나오고, 이틀 안팎으로 그 주소에 검토 결과가 올라와요. 이름·전화번호·이메일은 받지 않아요.</p></details>
     <details><summary>숫자가 틀린 것 같으면 어떻게 하나요?</summary><p>인스타그램 @sdm.check DM으로 어느 부분인지 알려 주세요. 원자료와 대조해서 고치고, 고친 내용과 날짜를 페이지에 적어 둘게요.</p></details>
   </section>
 
@@ -742,8 +750,10 @@ function renderQuick(s,r,used,note){
     <p class="note">${used} 계약 ${comma(r.package_n)}건 기준, ${desc}. 중간값 ${man(r.package_median)}, 가운데 50%는 ${man(r.package_p25)}~${man(r.package_p75)}.</p>
     ${note?`<p class="warnbox">${note}</p>`:""}${pick}
     ${scaleSVG(v,r)}
+    <div><h3 style="margin-bottom:6px">검토 결과를 글로도 받아 보세요</h3>
+    <p class="note">기본가 위치, 놓치기 쉬운 추가금, 물어볼 것을 글로 정리해 드려요.</p></div>
     <button type="button" class="btn primary big" data-apply>연락처 없이 무료 검토 신청</button>
-    <p class="note" style="text-align:center">지금은 무료 · 이름·전화번호·이메일 안 받아요</p>
+    <p class="note" style="text-align:center">지금은 무료 · 이름·전화번호·이메일 안 받아요<br>결과 요약(지역·금액·항목)과 검토 번호만 보내요</p>
     <a class="qmore" href="#form">따로 붙은 항목까지 넣고 예상 총액 보기 ↓</a>
   </div>`;
   qShown=true;
@@ -776,8 +786,8 @@ function ticketHTML(code,err){
   if(err) return `<div class="ticket"><p class="terr">신청을 보내지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.</p><button type="button" class="btn primary" data-apply>다시 신청하기</button></div>`;
   return `<div class="ticket" role="status">
     <p class="no">검토 번호</p><p class="code">${code}</p>
-    <div class="tsteps" aria-label="진행 단계: 접수됨"><div class="tst on"><i>1</i>접수</div><div class="tst"><i>2</i>검토 중</div><div class="tst"><i>3</i>답장 완료</div></div>
-    <p style="font-size:15px">하루 안에 아래 주소에 검토 결과가 올라와요. <b>주소를 꼭 저장해 두세요.</b> 이 화면을 닫으면 번호를 다시 찾을 수 없어요.</p>
+    <div class="tsteps" aria-label="진행 단계: 접수됨"><div class="tst on"><i>1</i>접수</div><div class="tst"><i>2</i>검토 중</div><div class="tst"><i>3</i>결과 게시</div></div>
+    <p style="font-size:15px">이틀 안팎으로 아래 주소에 검토 결과가 올라와요(주말엔 늦어질 수 있어요). 그 전에는 '검토 중'으로 보여요. <b>주소를 꼭 저장해 두세요.</b> 이 화면을 닫으면 번호를 다시 찾을 수 없어요.</p>
     <div class="turl">${url}</div>
     <div class="tbtns"><button type="button" class="btn" data-tcopy="https://${url}">주소 복사</button><button type="button" class="btn" data-tshare="https://${url}">나에게 보내기</button></div>
     <span class="copied" data-tmsg hidden>복사했어요</span>
@@ -788,7 +798,7 @@ async function apply(btn){
   const s=readState(); const base=s.sep?s.studio+s.dress+s.makeup:s.pkg;
   if(!base || base<QMIN){ $("pkg").focus(); $("pkg").scrollIntoView({block:"center"}); return; }
   const anchor=btn.closest(".qout,.apply-here,.ticket")||btn.parentNode;
-  const holder=anchor.classList.contains("ticket")?anchor.parentNode:anchor;
+  const holder=anchor.classList.contains("ticket")?anchor.parentNode.parentNode:anchor;
   let box=holder.querySelector(":scope > .tbox"); if(!box){ box=document.createElement("div"); box.className="tbox"; holder.append(box); }
   const key=lastSummary;
   if(sent[key]){ box.innerHTML=ticketHTML(sent[key]); return; }
@@ -841,7 +851,9 @@ setPressed("unsure",true); applyQuick(); render();
       <div class="srows">${v.e.map(e=>{const a=S.A[e.a]||{n:e.a};return `<div class="srow"><div class="t"><b>${e2(a.n)}</b><span>${a.p?"공개일 "+e2(a.p):"공개일 표시 없음"}</span></div><div class="pr">${e.l.map(e2).join("<br>")}</div>${a.u?`<a href="${e2(a.u)}" target="_blank" rel="noopener">참가격 원문 표 ↗</a>`:""}</div>`;}).join("")}</div>
       ${old?`<p class="swarn">공개일이 오래된 자료가 있어요. 지금 가격은 다를 수 있어요.</p>`:""}
       <p class="snote">대행사마다 상품 구성(포함 항목, 벌수, 시간대)이 달라요. 같은 줄로 비교하기 전에 구성이 같은지 원문 표에서 먼저 보세요.</p>
-      <button type="button" class="sbtn" data-go="checker">이 샵 견적 받았어요 · 총액 넣고 무료 검토</button></div>`;}
+      <p class="snote">이 샵이 들어간 견적을 받았다면, 스드메 총액을 넣어서 실제 계약 금액 중 어디쯤인지 확인해 보세요.</p>
+      <button type="button" class="sbtn" data-go="checker">내 견적 총액으로 비교하기</button>
+      <p class="snote" style="text-align:center;text-wrap:balance">무료 검토는 비교 결과 화면에서 신청할 수 있어요.</p></div>`;}
   function countFound(){ if(foundCounted||!history.pushState) return; foundCounted=true; try{history.pushState({found:1},"","/found/"+location.hash);}catch(e){} }
   function show(i,list){ clearTimeout(foundTimer);
     out.innerHTML=(list&&list.length>1?`<div class="spick" style="margin-bottom:12px">${list.slice(0,6).map(([v,k])=>`<button type="button" data-i="${k}" aria-pressed="${k===i}">${e2(v.n)}</button>`).join("")}</div>`:"")+`<div id="shopRes">${rows(i)}</div>`;
